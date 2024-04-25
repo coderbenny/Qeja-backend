@@ -1,11 +1,14 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, request
-from flask_restful import Api, Resource
+from flask_restful import Api
 from flask_session import Session
 from flask_cors import CORS
+from flask_migrate import Migrate
 
-from lib.models import db
+from lib.models import db, User, Profile, Property, Role, Message
+
+from routes import Index, Users, UserByID, Properties, PropertyByID 
 
 # Load env variables
 load_dotenv()
@@ -21,6 +24,9 @@ app.config["SESSION_TYPE"] = "filesystem"
 # init cors
 CORS(app)
 
+# init migration
+migrate = Migrate(app, db)
+
 # init session
 Session(app)
 
@@ -30,13 +36,12 @@ db.init_app(app)
 # init api
 api = Api(app)
 
-# home route
-class Index(Resource):
-    
-    def get(self):
-        return "Welcome to Qeja API"
-    
-api.add_resource(Index, "/")
+# Routes
+api.add_resource(Index, "/") # Home Route
+api.add_resource(Users, "/users") # Users Route
+api.add_resource(UserByID, "/users/<int:id>") # Users By ID Route
+api.add_resource(Properties, "/properties") # Properties Route
+api.add_resource(PropertyByID, "/properties/<int:id>") # Property By ID Route
 
 
 
