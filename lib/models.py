@@ -26,6 +26,8 @@ class User(db.Model, SerializerMixin):
 
     # One-to-One relationship with Role
     role = db.relationship("Role")
+    
+    serialize_rules = ("-profile.user","-properties.user","-sent_messages.sender","-received_messages.receiver","-role.Role")
 
     def __repr__(self):
         return f'<User {self.name}>'
@@ -42,6 +44,8 @@ class Profile(db.Model, SerializerMixin):
 
     # One-to-One relationship with User
     user = db.relationship("User", back_populates="profile")
+    
+    serialize_rules = ("-user.profile",)
 
     def __repr__(self):
         return f'<Profile {self.user_id}, {self.role_id}>'
@@ -71,6 +75,9 @@ class Property(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     user = db.relationship('User', back_populates="properties")
+    
+    serialize_rules = ("-user.properties",)
+
 
     def __repr__(self):
         return f'<Property {self.rent}, {self.location}>'
@@ -89,6 +96,8 @@ class Message(db.Model, SerializerMixin):
     
     # Many-to-One relationship with User (receiver)
     receiver = db.relationship("User", foreign_keys=[receiver_id], back_populates="received_messages")
+
+    serialize_rules = ("-receiver.received_messages")
 
     def __repr__(self):
         return f'<Message {self.sender_id}, {self.receiver_id}>'

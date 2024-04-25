@@ -6,9 +6,9 @@ from flask_session import Session
 from flask_cors import CORS
 from flask_migrate import Migrate
 
-from lib.models import db, User, Profile, Property, Role, Message
+from lib import db, User, Profile, Property, Role, Message
 
-from routes import Index, Users, UserByID, Properties, PropertyByID 
+from routes import Index, Users, UserByID, Properties, PropertyByID, Roles
 
 # Load env variables
 load_dotenv()
@@ -42,6 +42,7 @@ api.add_resource(Users, "/users") # Users Route
 api.add_resource(UserByID, "/users/<int:id>") # Users By ID Route
 api.add_resource(Properties, "/properties") # Properties Route
 api.add_resource(PropertyByID, "/properties/<int:id>") # Property By ID Route
+api.add_resource(Roles, "/roles") # Roles Route
 
 
 

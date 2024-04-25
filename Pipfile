@@ -12,6 +12,7 @@ flask-session = "*"
 python-dotenv = "*"
 flask-cors = "*"
 flask-migrate = "*"
+faker = "*"
 
 [dev-packages]
 
