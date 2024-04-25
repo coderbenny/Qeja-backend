@@ -38,7 +38,9 @@ class User(db.Model, SerializerMixin):
                 "id": self.id,
                 "name": self.name,
                 "email":self.email,
-                "properties": [p.to_dict() for p in self.properties]
+                "properties": [p.to_dict() for p in self.properties],
+                "sent_messages":[m.to_dict() for m in self.sent_messages],
+                "received_messages":[m.to_dict() for m in self.received_messages],
             }
         return {
             "id": self.id,
@@ -46,8 +48,8 @@ class User(db.Model, SerializerMixin):
             "email":self.email,
             "profile":self.profile,
             "role_id":self.role_id,
-            "sent_messages":self.sent_messages,
-            "received_messages":self.received_messages,
+            "sent_messages":[m.to_dict() for m in self.sent_messages],
+            "received_messages":[m.to_dict() for m in self.received_messages],
         }
 
 class Profile(db.Model, SerializerMixin):
@@ -136,7 +138,22 @@ class Message(db.Model, SerializerMixin):
     # Many-to-One relationship with User (receiver)
     receiver = db.relationship("User", foreign_keys=[receiver_id], back_populates="received_messages")
 
-    serialize_rules = ("-receiver.received_messages")
+    serialize_rules = ("-receiver.received_messages", "-sender.sent_messages")
 
     def __repr__(self):
         return f'<Message {self.sender_id}, {self.receiver_id}>'
+    
+    def to_dict(self, view_receiver=False):
+        if view_receiver:
+            return {
+                "id": self.id,
+                "sender": self.sender.name, 
+                "receiver": self.receiver.name, 
+                "content": self.content 
+            }
+        return {
+            "id": self.id,
+            "sender_id": self.sender_id,
+            "receiver_id": self.receiver_id,
+            "content": self.content
+        }

@@ -8,25 +8,39 @@ faker = Faker()
 
 with app.app_context():
     
-    users = User.query.all()
+    print("seeding messages...")
     
-    for user in users:
-        
-        property_data = {
-            'pic1': faker.image_url(),
-            'pic2': faker.image_url(),
-            'pic3': faker.image_url(),
-            'description': faker.sentence(),
-            'location': faker.address(),
-            'rent': faker.random_number(digits=4),
-            'amenities': faker.sentence(),
-            'compatibility_factors': faker.sentence(),
-            'user_id': user.id
-        }
-        new_property = Property(**property_data)
-        db.session.add(new_property)
+    new_message = Message(
+        sender_id = 1,
+        receiver_id = 2,
+        content = "I like your houses my guy. Can I come for a visit"
+    )
     
+    db.session.add(new_message)
     db.session.commit()
+    
+    print("seeded message")
+    
+    
+    # users = User.query.all()
+    
+    # for user in users:
+        
+    #     property_data = {
+    #         'pic1': faker.image_url(),
+    #         'pic2': faker.image_url(),
+    #         'pic3': faker.image_url(),
+    #         'description': faker.sentence(),
+    #         'location': faker.address(),
+    #         'rent': faker.random_number(digits=4),
+    #         'amenities': faker.sentence(),
+    #         'compatibility_factors': faker.sentence(),
+    #         'user_id': user.id
+    #     }
+    #     new_property = Property(**property_data)
+    #     db.session.add(new_property)
+    
+    # db.session.commit()
     
     
     
