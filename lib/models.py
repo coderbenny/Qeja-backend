@@ -99,14 +99,14 @@ class Property(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Property {self.rent}, {self.location}>'
     
-    def to_dict(self, view_user=False):
-        if view_user:
+    def to_dict(self, view_owner=False):
+        if view_owner:
             return{
                 "id": self.id,  
                 "description": self.description, 
                 "rent": self.rent, 
                 "location": self.location, 
-                "user": self.user
+                "owner": self.user.name
             }
         return{
             "id": self.id, 
