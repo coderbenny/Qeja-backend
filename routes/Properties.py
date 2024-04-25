@@ -1,4 +1,4 @@
-from flask import jsonify, make_response
+from flask import request, jsonify, make_response
 from flask_restful import Resource
 from lib import db, Property
 
@@ -19,5 +19,46 @@ class Properties(Resource):
         
     
     def post(self):
-        return "Route for adding a property"
+        data = request.get_json()
+        
+        if not data:
+            return {"error":"Invalid data"}, 400
+        
+        pic1 = data.get("pic1") 
+        pic2 = data.get("pic2") 
+        pic3 = data.get("pic3") 
+        description = data.get("description") 
+        location = data.get("location")
+        rent = data.get("rent")
+        amenities = data.get("amenities") 
+        compatibility_factors = data.get("compatibility_factors")
+        user_id = data.get("user_id")
     
+        if not all([pic1, pic2, pic3, description, location, rent, amenities, compatibility_factors, user_id]):
+            return {"error":"Invalid data"}, 400
+        
+        try:
+            new_property = Property(
+                pic1=pic1, 
+                pic2=pic2, 
+                pic3=pic3,
+                description=description,
+                location=location,
+                rent=rent,
+                amenities=amenities,
+                compatibility_factors=compatibility_factors,
+                user_id=user_id
+                )
+            
+            db.session.add(new_property)
+            db.session.commit()
+            
+            response = make_response(
+                jsonify(new_property.to_dict(view_owner=True)),
+                201
+            )
+            
+            return response
+        except Exception as e:
+            db.session.rollback()
+            return {"error":"An error occurred"}, 500
