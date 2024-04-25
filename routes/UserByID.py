@@ -11,7 +11,7 @@ class UserByID(Resource):
             return {"error":"User does not exist"}
 
         response = make_response(
-            jsonify(user.to_dict()),
+            jsonify(user.to_dict(view_property=True)),
             200
         )
         

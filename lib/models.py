@@ -31,6 +31,24 @@ class User(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'<User {self.name}>'
+    
+    def to_dict(self, view_property=False):
+        if view_property:
+            return {
+                "id": self.id,
+                "name": self.name,
+                "email":self.email,
+                "properties": [p.to_dict() for p in self.properties]
+            }
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email":self.email,
+            "profile":self.profile,
+            "role_id":self.role_id,
+            "sent_messages":self.sent_messages,
+            "received_messages":self.received_messages,
+        }
 
 class Profile(db.Model, SerializerMixin):
     __tablename__ = 'profiles'
@@ -78,9 +96,30 @@ class Property(db.Model, SerializerMixin):
     
     serialize_rules = ("-user.properties",)
 
-
     def __repr__(self):
         return f'<Property {self.rent}, {self.location}>'
+    
+    def to_dict(self, view_user=False):
+        if view_user:
+            return{
+                "id": self.id,  
+                "description": self.description, 
+                "rent": self.rent, 
+                "location": self.location, 
+                "user": self.user
+            }
+        return{
+            "id": self.id, 
+            "pic1": self.pic1, 
+            "pic2": self.pic2, 
+            "pic3": self.pic3, 
+            "description": self.description, 
+            "rent": self.rent, 
+            "location": self.location, 
+            "amenities": self.amenities, 
+            "compatibility_factors": self.compatibility_factors
+        }
+        
 
 class Message(db.Model, SerializerMixin):
     __tablename__ = 'messages'
