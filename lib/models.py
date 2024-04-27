@@ -91,6 +91,7 @@ class Property(db.Model, SerializerMixin):
     rent = db.Column(db.String)
     amenities = db.Column(db.String)
     compatibility_factors = db.Column(db.String)
+    rooms = db.Column(db.Integer, default=0)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
@@ -113,6 +114,7 @@ class Property(db.Model, SerializerMixin):
                 "location": self.location, 
                 "amenities": self.amenities, 
                 "compatibility_factors": self.compatibility_factors,
+                "rooms": self.rooms,
                 "owner": self.user.name
             }
         return{
@@ -122,6 +124,7 @@ class Property(db.Model, SerializerMixin):
             "pic3": self.pic3, 
             "description": self.description, 
             "rent": self.rent, 
+            "rooms": self.rooms,
             "location": self.location, 
             "amenities": self.amenities, 
             "compatibility_factors": self.compatibility_factors,
