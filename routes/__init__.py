@@ -4,3 +4,4 @@ from .PropertyByID import PropertyByID
 from .UserByID import UserByID
 from .Users import Users
 from .Roles import Roles
+from .UsersByRole import UsersByRole
