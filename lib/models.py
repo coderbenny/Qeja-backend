@@ -104,10 +104,15 @@ class Property(db.Model, SerializerMixin):
     def to_dict(self, view_owner=False):
         if view_owner:
             return{
-                "id": self.id,  
+                "id": self.id, 
+                "pic1": self.pic1, 
+                "pic2": self.pic2, 
+                "pic3": self.pic3, 
                 "description": self.description, 
                 "rent": self.rent, 
                 "location": self.location, 
+                "amenities": self.amenities, 
+                "compatibility_factors": self.compatibility_factors,
                 "owner": self.user.name
             }
         return{
@@ -119,7 +124,8 @@ class Property(db.Model, SerializerMixin):
             "rent": self.rent, 
             "location": self.location, 
             "amenities": self.amenities, 
-            "compatibility_factors": self.compatibility_factors
+            "compatibility_factors": self.compatibility_factors,
+            "owner_id": self.user_id
         }
         
 
