@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 
 from lib import db, User, Profile, Property, Role, Message
 
-from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole
+from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login
 
 # Load env variables
 load_dotenv()
@@ -44,6 +44,7 @@ api.add_resource(Properties, "/properties") # Properties Route
 api.add_resource(PropertyByID, "/properties/<int:id>") # Property By ID Route
 api.add_resource(Roles, "/roles") # Roles Route
 api.add_resource(UsersByRole, "/users/roles/<int:roleId>") # Users By Role ID Route
+api.add_resource(Login, "/login") # Login Route
 
 
 
