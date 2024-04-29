@@ -32,6 +32,10 @@ class Users(Resource):
         if not all([name, email, password, role_id]):
             return {"error":"Invalid user data"}, 400
         
+        user = User.query.filter_by(email=email).first()
+        if user:
+            return {"error":"user exists"}, 409
+        
         try:
             new_user = User(name=name, email=email, password=password, role_id=role_id)
             db.session.add(new_user)

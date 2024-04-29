@@ -20,7 +20,7 @@ class Login(Resource):
         if user.password != password:
             abort(401, description="Wrong password")
         
-        session["user"] = {"name": user.name, "email": user.email, "role_id": user.role_id}
+        session["user_id"] = user.id
         
         response = make_response(
             jsonify({

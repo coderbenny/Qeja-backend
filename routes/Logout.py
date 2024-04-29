@@ -5,11 +5,9 @@ class Logout(Resource):
     
     def delete(self):
         
-        if "user" not in session:
-            return jsonify({"error": "User is not logged in"}), 403
+        if "user_id" not in session:
+            return {"error": "User is not logged in"}, 403
         
-        session.pop("user")        
-        response = make_response(jsonify({"success": "Logged out successfully"}), 200)
-        
+        session.pop("user_id")
         # response.set_cookie("session", "", expires=0)
-        return response
+        return {}, 200
