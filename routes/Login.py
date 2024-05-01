@@ -1,6 +1,8 @@
 from flask import jsonify, request, session, abort, make_response
 from flask_restful import Resource
+from flask_jwt_extended import create_access_token
 
+from datetime import timedelta
 from lib import User
 
 class Login(Resource):
@@ -21,11 +23,15 @@ class Login(Resource):
             abort(401, description="Wrong password")
         
         session["user_id"] = user.id
+        access_token = create_access_token(identity=user.email)
+        
+        # expiry = timedelta(days=1)
         
         response = make_response(
-            jsonify({
-                "name": user.name,
-                "email": user.email,
-                "role_id": user.role_id
-            }), 200)
+            jsonify({"name":user.name,"role_id":user.role_id,"access_token":access_token}),
+            200
+        )
+        response.set_cookie('access_token', access_token, httponly=True)
         return response
+        
+        

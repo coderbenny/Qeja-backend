@@ -6,9 +6,13 @@ from flask_session import Session
 from flask_cors import CORS
 from flask_migrate import Migrate
 
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
 from lib import db, User, Profile, Property, Role, Message
 
-from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout
+from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami
 
 # Load env variables
 load_dotenv()
@@ -21,8 +25,11 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = os.getenv("APP_SECRET_KEY")
 app.config["SESSION_TYPE"] = "filesystem"
 
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+jwt = JWTManager(app)
+
 # init cors
-CORS(app)
+CORS(app, supports_credentials=True)
 
 # init migration
 migrate = Migrate(app, db)
@@ -46,6 +53,7 @@ api.add_resource(Roles, "/roles") # Roles Route
 api.add_resource(UsersByRole, "/users/roles/<int:roleId>") # Users By Role ID Route
 api.add_resource(Login, "/login") # Login Route
 api.add_resource(Logout, "/logout") # Logout Route
+api.add_resource(Whoami, "/whoami") # Protected Route (Check if a user exists)
 
 
 
