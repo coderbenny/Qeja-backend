@@ -12,7 +12,7 @@ from flask_jwt_extended import JWTManager
 
 from lib import db, User, Profile, Property, Role, Message
 
-from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami
+from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami, RoomMates
 
 # Load env variables
 load_dotenv()
@@ -54,6 +54,7 @@ api.add_resource(UsersByRole, "/users/roles/<int:roleId>") # Users By Role ID Ro
 api.add_resource(Login, "/login") # Login Route
 api.add_resource(Logout, "/logout") # Logout Route
 api.add_resource(Whoami, "/whoami") # Protected Route (Check if a user exists)
+api.add_resource(RoomMates, "/roommates") # Room mates Route
 
 
 

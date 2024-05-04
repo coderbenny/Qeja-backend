@@ -31,10 +31,15 @@ class Properties(Resource):
         location = data.get("location")
         rent = data.get("rent")
         amenities = data.get("amenities") 
-        compatibility_factors = data.get("compatibility_factors")
+        wifi = data.get("wifi")
+        gated = data.get("gated")
+        hot_shower = data.get("hot_shower")
+        kitchen = data.get("kitchen")
+        balcony = data.get("balcony")
+        parking = data.get("parking")
         user_id = data.get("user_id")
     
-        if not all([pic1, pic2, pic3, description, location, rent, amenities, compatibility_factors, user_id]):
+        if not all([pic1, pic2, pic3, description, location, rent, wifi, gated, hot_shower, kitchen, balcony, parking, user_id]):
             return {"error":"Invalid data"}, 400
         
         try:
@@ -45,8 +50,12 @@ class Properties(Resource):
                 description=description,
                 location=location,
                 rent=rent,
-                amenities=amenities,
-                compatibility_factors=compatibility_factors,
+                wifi=wifi,
+                parking=parking,
+                gated=gated,
+                hot_shower=hot_shower,
+                kitchen=kitchen,
+                balcony=balcony,
                 user_id=user_id
                 )
             

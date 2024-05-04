@@ -89,9 +89,14 @@ class Property(db.Model, SerializerMixin):
     description = db.Column(db.String)
     location = db.Column(db.String)
     rent = db.Column(db.String)
-    amenities = db.Column(db.String)
-    compatibility_factors = db.Column(db.String)
+    wifi = db.Column(db.Boolean)
+    gated = db.Column(db.Boolean)
+    hot_shower = db.Column(db.Boolean)
+    kitchen = db.Column(db.Boolean)
+    balcony = db.Column(db.Boolean)
+    parking = db.Column(db.Boolean)
     rooms = db.Column(db.Integer, default=0)
+    for_rent = db.Column(db.Boolean)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
@@ -112,9 +117,14 @@ class Property(db.Model, SerializerMixin):
                 "description": self.description, 
                 "rent": self.rent, 
                 "location": self.location, 
-                "amenities": self.amenities, 
-                "compatibility_factors": self.compatibility_factors,
+                "wifi": self.wifi,
+                "gated": self.gated,
+                "hot_shower": self.hot_shower,
+                "kitchen": self.kitchen,
+                "balcony": self.balcony,
+                "parking": self.parking,
                 "rooms": self.rooms,
+                "for_rent": self.for_rent,
                 "owner": self.user.name
             }
         return{
@@ -126,8 +136,13 @@ class Property(db.Model, SerializerMixin):
             "rent": self.rent, 
             "rooms": self.rooms,
             "location": self.location, 
-            "amenities": self.amenities, 
-            "compatibility_factors": self.compatibility_factors,
+            "wifi": self.wifi,
+            "gated": self.gated,
+            "hot_shower": self.hot_shower,
+            "kitchen": self.kitchen,
+            "balcony": self.balcony,
+            "parking": self.parking, 
+            "for_rent": self.for_rent, 
             "owner_id": self.user_id
         }
         
