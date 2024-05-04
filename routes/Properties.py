@@ -1,9 +1,11 @@
 from flask import request, jsonify, make_response
 from flask_restful import Resource
 from lib import db, Property
+from flask_jwt_extended import jwt_required
+
 
 class Properties(Resource):
-    
+    # @jwt_required()    
     def get(self):
         properties = Property.query.all()
         
@@ -37,9 +39,10 @@ class Properties(Resource):
         kitchen = data.get("kitchen")
         balcony = data.get("balcony")
         parking = data.get("parking")
+        available = data.get("available")
         user_id = data.get("user_id")
     
-        if not all([pic1, pic2, pic3, description, location, rent, wifi, gated, hot_shower, kitchen, balcony, parking, user_id]):
+        if not all([pic1, pic2, pic3, description, location, rent, wifi, gated, hot_shower, kitchen, balcony, parking, available, user_id]):
             return {"error":"Invalid data"}, 400
         
         try:
@@ -56,6 +59,7 @@ class Properties(Resource):
                 hot_shower=hot_shower,
                 kitchen=kitchen,
                 balcony=balcony,
+                available=available,
                 user_id=user_id
                 )
             

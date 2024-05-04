@@ -97,6 +97,7 @@ class Property(db.Model, SerializerMixin):
     parking = db.Column(db.Boolean)
     rooms = db.Column(db.Integer, default=0)
     for_rent = db.Column(db.Boolean)
+    available = db.Column(db.Boolean)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
@@ -125,6 +126,7 @@ class Property(db.Model, SerializerMixin):
                 "parking": self.parking,
                 "rooms": self.rooms,
                 "for_rent": self.for_rent,
+                "available": self.available,
                 "owner": self.user.name
             }
         return{
@@ -143,6 +145,7 @@ class Property(db.Model, SerializerMixin):
             "balcony": self.balcony,
             "parking": self.parking, 
             "for_rent": self.for_rent, 
+            "available": self.available,
             "owner_id": self.user_id
         }
         

@@ -43,6 +43,7 @@ with app.app_context():
             parking=fake.boolean(),
             rooms=fake.random_int(min=1, max=10),
             for_rent=fake.boolean(),
+            user_id=1,
         )
             
         db.session.add(property)

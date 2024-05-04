@@ -1,9 +1,12 @@
 from flask import make_response, jsonify
 from flask_restful import Resource
 from lib import db, Property
+from flask_jwt_extended import jwt_required
+
 
 class PropertyByID(Resource):
     
+    # @jwt_required()
     def get(self, id):
         property = Property.query.filter_by(id=id).first()
             
