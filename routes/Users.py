@@ -41,6 +41,7 @@ class Users(Resource):
             db.session.add(new_user)
             db.session.commit()
             
+            
             response = make_response(
                 jsonify(new_user.to_dict()), 
                 201

@@ -60,6 +60,7 @@ class Profile(db.Model, SerializerMixin):
     bio = db.Column(db.String)
     followers = db.Column(db.Integer)
     following = db.Column(db.Integer)
+    location = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # One-to-One relationship with User
