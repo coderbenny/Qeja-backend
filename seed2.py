@@ -43,12 +43,13 @@ with app.app_context():
     # Seed properties
     print("Seeding properties...")
     locations = ["Nairobi", "Kisumu", "Mombasa", "Eldoret"]
+    images = ["/edited.jpg", "/22.jpg", "/cityscape.jpg"]
 
-    for _ in range(10):
+    for _ in range(20):
         property_data = {
-            "pic1": fake.image_url(),
-            "pic2": fake.image_url(),
-            "pic3": fake.image_url(),
+            "pic1": choice(images),
+            "pic2": choice(images),
+            "pic3": choice(images),
             "description": fake.text(),
             "location": choice(locations),
             "rent": fake.random_number(digits=5),
@@ -60,7 +61,7 @@ with app.app_context():
             "parking": fake.boolean(),
             "rooms": fake.random_int(min=1, max=10),
             "for_rent": fake.boolean(),
-            "user_id": 1,  # Assigning to user with id 1 for example purposes
+            "user_id": fake.random_int(min=1, max=2),
         }
         property = Property(**property_data)
         db.session.add(property)

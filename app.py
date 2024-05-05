@@ -5,6 +5,7 @@ from flask_restful import Api
 from flask_session import Session
 from flask_cors import CORS
 from flask_migrate import Migrate
+from datetime import timedelta
 
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
@@ -26,6 +27,7 @@ app.config["SECRET_KEY"] = os.getenv("APP_SECRET_KEY")
 app.config["SESSION_TYPE"] = "filesystem"
 
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 jwt = JWTManager(app)
 
 # init cors

@@ -11,7 +11,7 @@ class Whoami(Resource):
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
         response = make_response(
-            jsonify({"name":user.name,"email":user.email, "role_id":user.role_id}), 
+            jsonify({"name":user.name,"email":user.email, "role_id":user.role_id, "user_profile":user.profile}), 
             200
         )
         
