@@ -9,4 +9,4 @@ from .Login import Login
 from .Logout import Logout
 from .Whoami import Whoami
 from .RoomMates import RoomMates
-# from .RoomateByID import RoomateByID
+from .RoommateByID import RoommateByID
