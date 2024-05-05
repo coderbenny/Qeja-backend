@@ -10,3 +10,4 @@ from .Logout import Logout
 from .Whoami import Whoami
 from .RoomMates import RoomMates
 from .RoommateByID import RoommateByID
+from .PropertyForSale import PropertyForSale
