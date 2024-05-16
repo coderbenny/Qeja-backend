@@ -23,15 +23,16 @@ class Login(Resource):
             abort(401, description="Wrong password")
         
         session["user_id"] = user.id
-        access_token = create_access_token(identity=user.email)
+        access_token = create_access_token(identity=user)
+        # access_token = create_access_token(identity=user.email)
         
         # expiry = timedelta(days=1)
         
-        response = make_response(
-            jsonify({"name":user.name,"role_id":user.role_id,"access_token":access_token}),
-            200
-        )
-        response.set_cookie('access_token', access_token, httponly=True)
-        return response
+        # response = make_response(
+        #     jsonify({"name":user.name,"role_id":user.role_id,"access_token":access_token}),
+        #     200
+        # )
+        # response.set_cookie('access_token', access_token, httponly=True)
+        # return response
         
-        
+        return jsonify(access_token=access_token)
