@@ -11,14 +11,14 @@ with app.app_context():
     
     fake = Faker()  
     # Seed roles
-    # roles = ["owner", "tenant", "roommate"]
+    roles = ["owner", "tenant", "roommate"]
     
-    # print("Seeding roles...")
-    # for role in roles:
-    #     new_role = Role(title=role)
-    #     db.session.add(new_role)
-    # db.session.commit()
-    # print("Seeding roles complete")
+    print("Seeding roles...")
+    for role in roles:
+        new_role = Role(title=role)
+        db.session.add(new_role)
+    db.session.commit()
+    print("Seeding roles complete")
     
     
     # Seeding property
