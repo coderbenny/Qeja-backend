@@ -3,6 +3,13 @@ from sqlalchemy_serializer import SerializerMixin
 
 db = SQLAlchemy()
 
+# join table for followers/following
+followers = db.Table(
+    'followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('followed_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+)
+
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -24,6 +31,13 @@ class User(db.Model, SerializerMixin):
     # One-to-Many relationship with Messages as receiver
     received_messages = db.relationship("Message", foreign_keys="[Message.receiver_id]", back_populates="receiver")
 
+    followers = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('following', lazy='dynamic'), lazy='dynamic'
+    )
+    
     # One-to-One relationship with Role
     role = db.relationship("Role")
     
@@ -37,6 +51,9 @@ class User(db.Model, SerializerMixin):
             return {
                 "id": self.id,
                 "name": self.name,
+                "profile":self.profile.to_dict(),
+                "followers":self.follower_count,
+                "following":self.following_count,
                 "email":self.email,
                 "properties": [p.to_dict() for p in self.properties],
                 "sent_messages":[m.to_dict() for m in self.sent_messages],
@@ -46,11 +63,33 @@ class User(db.Model, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "email":self.email,
-            "profile":self.profile,
+            "profile":self.profile.to_dict(),
             "role_id":self.role_id,
+            "followers":self.follower_count,
+            "following":self.following_count,
             "sent_messages":[m.to_dict() for m in self.sent_messages],
             "received_messages":[m.to_dict() for m in self.received_messages],
         }
+        
+    def follow(self, user):
+        if not self.is_following(user):
+            self.following.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.following.remove(user)
+
+    def is_following(self, user):
+        return self.following.filter(followers.c.followed_id == user.id).count() > 0
+    
+    @property
+    def follower_count(self):
+        return self.followers.count()
+
+    @property
+    def following_count(self):
+        return self.following.count()
+
 
 class Profile(db.Model, SerializerMixin):
     __tablename__ = 'profiles'
@@ -58,8 +97,6 @@ class Profile(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     role_id = db.Column(db.Integer)
     bio = db.Column(db.String)
-    followers = db.Column(db.Integer)
-    following = db.Column(db.Integer)
     location = db.Column(db.String(100))
     profile_pic = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -70,7 +107,17 @@ class Profile(db.Model, SerializerMixin):
     serialize_rules = ("-user.profile",)
 
     def __repr__(self):
-        return f'<Profile {self.user_id}, {self.role_id}>'
+        return f'<Profile {self.user_id}, {self.location}>'
+    
+    def to_dict(self):
+        return{
+            "id":self.id,
+            "role_id":self.role_id,
+            "bio":self.bio,
+            "location":self.location,
+            "profile_pic":self.profile_pic,
+            "user_id":self.user_id,
+        }
 
 class Role(db.Model, SerializerMixin):
     __tablename__ = 'roles'
@@ -186,3 +233,19 @@ class Message(db.Model, SerializerMixin):
             "receiver_id": self.receiver_id,
             "content": self.content
         }
+        
+class Post(db.Model, SerializerMixin):
+    __tablename__ = "posts"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'), nullable=False)
+    body = db.Column(db.String, nullable=False)
+    img1 = db.Column(db.String)
+    img2 = db.Column(db.String)
+    img3 = db.Column(db.String)
+
+
+    def __repr__(self):
+        return f'<Post {self.id} {self.body}>'
+    
+    

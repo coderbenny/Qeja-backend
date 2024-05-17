@@ -11,9 +11,9 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
-from lib import db, User, Profile, Property, Role, Message
+from lib import db, User, Profile, Property, Role, Message, Post, followers
 
-from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami, RoomMates, RoommateByID, PropertyForSale
+from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami, RoomMates, RoommateByID, PropertyForSale, ViewPosts, PostByID, Follow
 
 # Load env variables
 load_dotenv()
@@ -76,6 +76,9 @@ api.add_resource(Whoami, "/whoami") # Protected Route (Check if a user exists)
 api.add_resource(RoomMates, "/roommates") # Room mates Route
 api.add_resource(RoommateByID, "/roommates/<int:id>") # Room mate By ID Route
 api.add_resource(PropertyForSale, "/for-sale") # Properties For Sale Route
+api.add_resource(ViewPosts, "/posts") # All Posts Route
+api.add_resource(PostByID, "/posts/<int:id>") # All Posts Route
+api.add_resource(Follow, "/follow/<int:user_id>") # Following a user Route
 
 
 
