@@ -13,7 +13,7 @@ from flask_jwt_extended import JWTManager
 
 from lib import db, User, Profile, Property, Role, Message, Post, followers
 
-from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami, RoomMates, RoommateByID, PropertyForSale, ViewPosts, PostByID, Follow
+from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami, RoomMates, RoommateByID, PropertyForSale, ViewPosts, PostByID, Follow, Unfollow
 
 # Load env variables
 load_dotenv()
@@ -79,6 +79,7 @@ api.add_resource(PropertyForSale, "/for-sale") # Properties For Sale Route
 api.add_resource(ViewPosts, "/posts") # All Posts Route
 api.add_resource(PostByID, "/posts/<int:id>") # All Posts Route
 api.add_resource(Follow, "/follow/<int:user_id>") # Following a user Route
+api.add_resource(Unfollow, "/unfollow/<int:user_id>") # Unfollowing a user Route
 
 
 
