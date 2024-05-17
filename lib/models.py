@@ -7,7 +7,8 @@ db = SQLAlchemy()
 followers = db.Table(
     'followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('followed_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    db.Column('followed_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.UniqueConstraint('follower_id', 'followed_id', name='unique_follow_pair')
 )
 
 class User(db.Model, SerializerMixin):

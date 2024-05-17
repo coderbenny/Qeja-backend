@@ -16,9 +16,9 @@ class Follow(Resource):
         if not current_user:
             return {'error': 'Current user not found'}, 404
 
-        if not current_user.is_following(user_to_follow):
-            current_user.follow(user_to_follow)
-            db.session.commit()
-            return {'message': 'You are now following this user'}, 200
-        else:
+        if current_user.is_following(user_to_follow):
             return {'message': 'You are already following this user'}, 200
+
+        current_user.follow(user_to_follow)
+        db.session.commit()
+        return {'message': 'You are now following this user'}, 200
