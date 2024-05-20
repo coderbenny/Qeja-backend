@@ -26,13 +26,15 @@ class ViewPosts(Resource):
         
         user_id = data.get("user_id")
         body = data.get("body")
-        image = data.get("image")
+        img1 = data.get("img1")
+        img2 = data.get("img2")
+        img3 = data.get("img3")
         
         if not all([user_id, body]):
             return {"error":"Invalid user data"}, 400
         
         try:
-            new_post = Post(user_id=user_id, body=body, image=image)
+            new_post = Post(user_id=user_id, body=body, img1=img1,img2=img2,img3=img3)
             db.session.add(new_post)
             db.session.commit()
             

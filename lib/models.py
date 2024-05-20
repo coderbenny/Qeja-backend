@@ -32,6 +32,9 @@ class User(db.Model, SerializerMixin):
     # One-to-Many relationship with Messages as receiver
     received_messages = db.relationship("Message", foreign_keys="[Message.receiver_id]", back_populates="receiver")
 
+    # One-to-Many relationship with Posts
+    posts = db.relationship("Post", back_populates="user")
+
     followers = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -42,7 +45,7 @@ class User(db.Model, SerializerMixin):
     # One-to-One relationship with Role
     role = db.relationship("Role")
     
-    serialize_rules = ("-profile.user","-properties.user","-sent_messages.sender","-received_messages.receiver","-role.Role")
+    serialize_rules = ("-profile.user","-properties.user","-sent_messages.sender","-received_messages.receiver","-role.Role","-posts.user")
 
     def __repr__(self):
         return f'<User {self.name}>'
@@ -59,6 +62,7 @@ class User(db.Model, SerializerMixin):
                 "properties": [p.to_dict() for p in self.properties],
                 "sent_messages":[m.to_dict() for m in self.sent_messages],
                 "received_messages":[m.to_dict() for m in self.received_messages],
+                "posts":[p.to_dict() for p in self.posts],
             }
         return {
             "id": self.id,
@@ -70,6 +74,7 @@ class User(db.Model, SerializerMixin):
             "following":self.following_count,
             "sent_messages":[m.to_dict() for m in self.sent_messages],
             "received_messages":[m.to_dict() for m in self.received_messages],
+            "posts":[p.to_dict() for p in self.posts],
         }
         
     def follow(self, user):
@@ -244,8 +249,24 @@ class Post(db.Model, SerializerMixin):
     img1 = db.Column(db.String)
     img2 = db.Column(db.String)
     img3 = db.Column(db.String)
+    created_at = db.Column(db.DateTime, default=db.func.now)
 
 
+    def to_dict(self):
+        return{
+            "id":self.id,
+            "user_id":self.user_id,
+            "body":self.body,
+            "img1":self.img1,
+            "img2":self.img2,
+            "img3":self.img3,
+            "user":self.user.name,
+        }
+        
+    user = db.relationship("User", back_populates="posts")
+        
+    serialize_rules = ("-user.post",)
+    
     def __repr__(self):
         return f'<Post {self.id} {self.body}>'
     
