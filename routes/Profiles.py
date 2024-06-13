@@ -2,8 +2,6 @@ from flask import jsonify, make_response
 from flask_restful import Resource
 from lib import Profile
 
-
-
 class Profiles(Resource):
     
     def get(self):
