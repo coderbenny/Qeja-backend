@@ -41,6 +41,7 @@ class User(db.Model, SerializerMixin):
                 "properties": [p.to_dict() for p in self.properties],
                 "sent_messages":[m.to_dict() for m in self.sent_messages],
                 "received_messages":[m.to_dict() for m in self.received_messages],
+                "profile":self.profile.to_dict() if self.profile else None, 
             }
         return {
             "id": self.id,
@@ -68,6 +69,19 @@ class Profile(db.Model, SerializerMixin):
     user = db.relationship("User", back_populates="profile")
     
     serialize_rules = ("-user.profile",)
+
+    def to_dict(self):
+        return{
+            "id":self.id,
+            "role_id":self.role_id,
+            "bio":self.bio,
+            "followers":self.followers,
+            "following":self.following,
+            "location":self.location,
+            "profile_pic":self.profile_pic,
+            "user_id":self.user_id,
+            "name":self.user.name,
+        }
 
     def __repr__(self):
         return f'<Profile {self.user_id}, {self.role_id}>'

@@ -49,7 +49,7 @@ class UserByID(Resource):
             db.session.add(profile)  # Add profile to session if it was newly created
             db.session.commit()
             response = make_response(
-                jsonify(profile.to_dict()), 
+                jsonify(user.profile.to_dict()), 
                 200
             )
             return response

@@ -12,3 +12,4 @@ from .RoomMates import RoomMates
 from .RoommateByID import RoommateByID
 from .PropertyForSale import PropertyForSale
 from .Profiles import Profiles
+from .ProfileByID import ProfileByID
