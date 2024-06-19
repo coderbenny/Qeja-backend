@@ -8,6 +8,11 @@ followers = db.Table('followers',
     db.Column('followed_id', db.Integer, db.ForeignKey('users.id'))
 )
 
+likes = db.Table('likes',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('property_id', db.Integer, db.ForeignKey('properties.id'))
+)
+
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -33,6 +38,9 @@ class User(db.Model, SerializerMixin):
     # One-to-One relationship with Role
     role = db.relationship("Role")
     
+    # Many-to-Many relationship with Property through Like
+    liked_properties = db.relationship('Property', secondary=likes, back_populates='likers')
+
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -88,6 +96,18 @@ class User(db.Model, SerializerMixin):
             "sent_messages":[m.to_dict() for m in self.sent_messages],
             "received_messages":[m.to_dict() for m in self.received_messages],
         }
+
+    def like_property(self, property):
+        if not self.has_liked_property(property):
+            self.liked_properties.append(property)
+    
+    def unlike_property(self, property):
+        if self.has_liked_property(property):
+            self.liked_properties.remove(property)
+    
+    def has_liked_property(self, property):
+        return self.liked_properties.filter(
+            likes.c.property_id == property.id).count() > 0
 
 class Profile(db.Model, SerializerMixin):
     __tablename__ = 'profiles'
@@ -154,7 +174,8 @@ class Property(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     user = db.relationship('User', back_populates="properties")
-    
+    likers = db.relationship('User', secondary=likes, back_populates='liked_properties')
+
     serialize_rules = ("-user.properties",)
 
     def __repr__(self):
@@ -200,7 +221,6 @@ class Property(db.Model, SerializerMixin):
             "available": self.available,
             "owner_id": self.user_id
         }
-        
 
 class Message(db.Model, SerializerMixin):
     __tablename__ = 'messages'
@@ -219,20 +239,3 @@ class Message(db.Model, SerializerMixin):
 
     serialize_rules = ("-receiver.received_messages", "-sender.sent_messages")
 
-    def __repr__(self):
-        return f'<Message {self.sender_id}, {self.receiver_id}>'
-    
-    def to_dict(self, view_receiver=False):
-        if view_receiver:
-            return {
-                "id": self.id,
-                "sender": self.sender.name, 
-                "receiver": self.receiver.name, 
-                "content": self.content 
-            }
-        return {
-            "id": self.id,
-            "sender_id": self.sender_id,
-            "receiver_id": self.receiver_id,
-            "content": self.content
-        }
