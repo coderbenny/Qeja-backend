@@ -11,10 +11,9 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
-from lib import db, User, Profile, Property, Role, Message
+from lib import db, User, Profile, Property, Role, Message, followers, likes
 
 from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami, RoomMates, RoommateByID, PropertyForSale, Profiles, ProfileByID, FollowUser, UnfollowUser
-
 # Load env variables
 load_dotenv()
 

@@ -1,1 +1,1 @@
-from .models import db, User, Profile, Property, Role, Message
+from .models import db, User, Profile, Property, Role, Message, followers, likes
