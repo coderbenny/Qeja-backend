@@ -8,12 +8,20 @@ class Users(Resource):
         users = User.query.all()
         
         if not users:
-            return {"error":"No users found"}
+            return {"error": "No users found"}
 
-        response = make_response(
-            jsonify([u.to_dict() for u in users]),
-            200
-        )
+        response_data = []
+        for user in users:
+            user_dict = {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "role_id": user.role_id,
+                "profile": user.profile.to_dict() if user.profile else None
+            }
+            response_data.append(user_dict)
+
+        response = make_response(jsonify(response_data), 200)
         
         return response
         

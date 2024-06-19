@@ -12,8 +12,16 @@ class RoomMates(Resource):
         if not mates:
             return {"error":"Room mates not found"}, 404
     
-        response = make_response(
-            jsonify([r.to_dict() for r in mates]),
-            200
-        )
+        response_data = []
+        for mate in mates:
+            user_dict = {
+                "id": mate.id,
+                "name": mate.name,
+                "email": mate.email,
+                "profile": mate.profile.to_dict() if mate.profile else None
+            }
+            response_data.append(user_dict)
+
+        response = make_response(jsonify(response_data), 200)
+        
         return response

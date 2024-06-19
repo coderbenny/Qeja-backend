@@ -11,8 +11,7 @@ from .Whoami import Whoami
 from .RoomMates import RoomMates
 from .RoommateByID import RoommateByID
 from .PropertyForSale import PropertyForSale
-from .ViewPosts import ViewPosts
-from .PostByID import PostByID
-from .Follow import Follow
-from .Unfollow import Unfollow
-from .Followers import Followers
+from .Profiles import Profiles
+from .ProfileByID import ProfileByID
+from .FollowUser import FollowUser
+from .UnfollowUser import UnfollowUser

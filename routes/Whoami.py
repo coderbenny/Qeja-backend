@@ -9,15 +9,15 @@ from lib import User
 class Whoami(Resource):
     @jwt_required()
     def get(self):
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(id=current_user).first()
-        
-        return jsonify({
-                    "id":user.id,
-                    "name":user.name,
-                    "email":user.email,
-                    "role_id":user.role_id, 
-                    "profile":user.profile.to_dict(),
-                    "followers":user.follower_count,
-                    "following":user.following_count
-                })
+        profile_dict = current_user.profile.to_dict() if current_user.profile else None
+        response = make_response(
+            jsonify(
+                id=current_user.id,
+                name=current_user.name,
+                email=current_user.email,
+                role_id=current_user.role_id,
+                profile=profile_dict
+            ),
+            200
+        )
+        return response
