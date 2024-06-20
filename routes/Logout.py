@@ -9,5 +9,5 @@ class Logout(Resource):
         #     return {"error": "User is not logged in"}, 403
         
         # session.pop("user_id")
-        response.set_cookie("session", "", expires=0)
+        # response.set_cookie("session", "", expires=0)
         return {}, 200
