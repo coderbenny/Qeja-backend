@@ -88,6 +88,7 @@ class User(db.Model, SerializerMixin):
                 "sent_messages": [m.to_dict() for m in self.sent_messages],
                 "received_messages": [m.to_dict() for m in self.received_messages],
                 "profile": self.profile.to_dict() if self.profile else None,
+                "role_id": self.role_id,
                 "followed": [user.id for user in self.followed],
                 "followers": [user.id for user in self.followers],
             }
@@ -121,7 +122,6 @@ class Profile(db.Model, SerializerMixin):
     __tablename__ = 'profiles'
 
     id = db.Column(db.Integer, primary_key=True)
-    role_id = db.Column(db.Integer)
     bio = db.Column(db.String)
     followers = db.Column(db.Integer)
     following = db.Column(db.Integer)
@@ -137,7 +137,6 @@ class Profile(db.Model, SerializerMixin):
     def to_dict(self):
         return{
             "id":self.id,
-            "role_id":self.role_id,
             "bio":self.bio,
             "followers":self.followers,
             "following":self.following,
