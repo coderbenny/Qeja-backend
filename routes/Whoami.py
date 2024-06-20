@@ -9,15 +9,14 @@ from lib import User
 class Whoami(Resource):
     @jwt_required()
     def get(self):
-        profile_dict = current_user.profile.to_dict() if current_user.profile else None
-        response = make_response(
-            jsonify(
-                id=current_user.id,
-                name=current_user.name,
-                email=current_user.email,
-                role_id=current_user.role_id,
-                profile=profile_dict
-            ),
-            200
-        )
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        
+        if not user:
+            return {"error": "User does not exist"}, 404
+        
+        user_data = user.to_dict(view_property=True)
+        
+        response = make_response(jsonify(user_data), 200)
         return response
+        

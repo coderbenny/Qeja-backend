@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class UnfollowUser(Resource):
     @jwt_required()
-    def post(self, user_id):
+    def delete(self, user_id):
         try:
             current_user_id = get_jwt_identity()
             current_user = User.query.get(current_user_id)
@@ -15,10 +15,9 @@ class UnfollowUser(Resource):
                 return {"message": "User not found"}, 404
             
             if not current_user.is_following(user_to_unfollow):
-                return {"message": "You are not following this user"}, 400
+                return {"message": "Not following"}, 400
             
             current_user.unfollow(user_to_unfollow)
-            db.session.commit()
             return {"message": f"You have unfollowed {user_to_unfollow.name}"}, 200
         except Exception as e:
             return {"message": "Internal server error"}, 500

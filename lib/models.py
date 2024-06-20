@@ -50,10 +50,12 @@ class User(db.Model, SerializerMixin):
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
+            db.session.commit()  # Ensure the relationship is committed
 
     def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
+            db.session.commit()  # Ensure the relationship is committed
 
     def is_following(self, user):
         return self.followed.filter(
@@ -81,29 +83,35 @@ class User(db.Model, SerializerMixin):
             return {
                 "id": self.id,
                 "name": self.name,
-                "email":self.email,
+                "email": self.email,
                 "properties": [p.to_dict() for p in self.properties],
-                "sent_messages":[m.to_dict() for m in self.sent_messages],
-                "received_messages":[m.to_dict() for m in self.received_messages],
-                "profile":self.profile.to_dict() if self.profile else None, 
+                "sent_messages": [m.to_dict() for m in self.sent_messages],
+                "received_messages": [m.to_dict() for m in self.received_messages],
+                "profile": self.profile.to_dict() if self.profile else None,
+                "followed": [user.id for user in self.followed],
+                "followers": [user.id for user in self.followers],
             }
         return {
             "id": self.id,
             "name": self.name,
-            "email":self.email,
-            "profile":self.profile,
-            "role_id":self.role_id,
-            "sent_messages":[m.to_dict() for m in self.sent_messages],
-            "received_messages":[m.to_dict() for m in self.received_messages],
+            "email": self.email,
+            "profile": self.profile,
+            "role_id": self.role_id,
+            "sent_messages": [m.to_dict() for m in self.sent_messages],
+            "received_messages": [m.to_dict() for m in self.received_messages],
+            "followed": [user.id for user in self.followed],
+            "followers": [user.id for user in self.followers],
         }
 
     def like_property(self, property):
         if not self.has_liked_property(property):
             self.liked_properties.append(property)
+            db.session.commit()
     
     def unlike_property(self, property):
         if self.has_liked_property(property):
             self.liked_properties.remove(property)
+            db.session.commit()
     
     def has_liked_property(self, property):
         return self.liked_properties.filter(
