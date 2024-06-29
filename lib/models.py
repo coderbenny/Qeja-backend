@@ -22,6 +22,7 @@ class User(db.Model, SerializerMixin):
     phone = db.Column(db.String(100))
     password = db.Column(db.String)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    date_added = db.Column(db.DateTime,server_default=db.func.now())
 
     # One-to-One relationship with Profile
     profile = db.relationship("Profile", uselist=False, back_populates="user")
@@ -175,8 +176,8 @@ class Property(db.Model, SerializerMixin):
     balcony = db.Column(db.Boolean)
     parking = db.Column(db.Boolean)
     rooms = db.Column(db.Integer, default=0)
-    for_rent = db.Column(db.Boolean)
     available = db.Column(db.Boolean)
+    date_added = db.Column(db.DateTime,server_default=db.func.now())
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
@@ -205,7 +206,6 @@ class Property(db.Model, SerializerMixin):
                 "balcony": self.balcony,
                 "parking": self.parking,
                 "rooms": self.rooms,
-                "for_rent": self.for_rent,
                 "available": self.available,
                 "owner": self.user.name
             }
@@ -224,7 +224,6 @@ class Property(db.Model, SerializerMixin):
             "kitchen": self.kitchen,
             "balcony": self.balcony,
             "parking": self.parking, 
-            "for_rent": self.for_rent, 
             "available": self.available,
             "owner_id": self.user_id
         }

@@ -1,7 +1,7 @@
 from flask import request, jsonify, make_response
 from flask_restful import Resource
 from lib import db, Property
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user, get_jwt_identity
 
 
 class Properties(Resource):
@@ -20,10 +20,12 @@ class Properties(Resource):
         return response
         
     
+    @jwt_required()
     def post(self):
+        user_id = get_jwt_identity()
         data = request.get_json()
         
-        if not data:
+        if not data or not user_id:
             return {"error":"Invalid data"}, 400
         
         pic1 = data.get("pic1") 
@@ -32,7 +34,6 @@ class Properties(Resource):
         description = data.get("description") 
         location = data.get("location")
         rent = data.get("rent")
-        amenities = data.get("amenities") 
         wifi = data.get("wifi")
         gated = data.get("gated")
         hot_shower = data.get("hot_shower")
@@ -40,9 +41,10 @@ class Properties(Resource):
         balcony = data.get("balcony")
         parking = data.get("parking")
         available = data.get("available")
-        user_id = data.get("user_id")
+        rooms = data.get("rooms")
+        user_id = user_id
     
-        if not all([pic1, pic2, pic3, description, location, rent, wifi, gated, hot_shower, kitchen, balcony, parking, available, user_id]):
+        if not all([ description, location, rent, wifi, gated, available, rooms, user_id]):
             return {"error":"Invalid data"}, 400
         
         try:
