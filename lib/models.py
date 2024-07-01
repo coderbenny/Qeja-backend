@@ -207,7 +207,8 @@ class Property(db.Model, SerializerMixin):
                 "parking": self.parking,
                 "rooms": self.rooms,
                 "available": self.available,
-                "owner": self.user.name
+                "owner": self.user.name,
+                "owner_id": self.user_id
             }
         return{
             "id": self.id, 
@@ -235,7 +236,7 @@ class Message(db.Model, SerializerMixin):
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content = db.Column(db.String)
-    timestamp = db.Column(db.DateTime)
+    date_added = db.Column(db.DateTime,server_default=db.func.now())
 
     # Many-to-One relationship with User (sender)
     sender = db.relationship("User", foreign_keys=[sender_id], back_populates="sent_messages")
