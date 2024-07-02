@@ -5,7 +5,8 @@ from datetime import datetime
 from lib import db, User, Message
 
 class SendMessage(Resource):
-    def send_message():
+    
+    def post(self):
         data = request.get_json()
         
         sender_id = data.get('sender_id')

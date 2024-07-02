@@ -22,51 +22,39 @@ class User(db.Model, SerializerMixin):
     phone = db.Column(db.String(100))
     password = db.Column(db.String)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    date_added = db.Column(db.DateTime,server_default=db.func.now())
+    date_added = db.Column(db.DateTime, server_default=db.func.now())
 
-    # One-to-One relationship with Profile
     profile = db.relationship("Profile", uselist=False, back_populates="user")
-
-    # One-to-Many relationship with Properties
     properties = db.relationship("Property", back_populates="user")
-
-    # One-to-Many relationship with Messages as sender
     sent_messages = db.relationship("Message", foreign_keys="[Message.sender_id]", back_populates="sender")
-
-    # One-to-Many relationship with Messages as receiver
     received_messages = db.relationship("Message", foreign_keys="[Message.receiver_id]", back_populates="receiver")
-
-    # One-to-One relationship with Role
     role = db.relationship("Role")
-    
-    # Many-to-Many relationship with Property through Like
     liked_properties = db.relationship('Property', secondary=likes, back_populates='likers')
-
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
+    serialize_rules = ("-profile.user", "-properties.user", "-sent_messages.sender", "-received_messages.receiver", "-liked_properties.likers", "-followed.followers")
+
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
-            db.session.commit()  # Ensure the relationship is committed
+            db.session.commit()
 
     def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
-            db.session.commit()  # Ensure the relationship is committed
+            db.session.commit()
 
     def is_following(self, user):
-        return self.followed.filter(
-            followers.c.followed_id == user.id).count() > 0
+        return self.followed.filter(followers.c.followed_id == user.id).count() > 0
 
     def followed_posts(self):
         return Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
-                followers.c.follower_id == self.id).order_by(
-                    Post.timestamp.desc())
+                followers.c.follower_id == self.id).order_by(Post.timestamp.desc())
 
     @property
     def followed_count(self):
@@ -75,35 +63,6 @@ class User(db.Model, SerializerMixin):
     @property
     def followers_count(self):
         return self.followers.count()
-    
-    def __repr__(self):
-        return f'<User {self.name}>'
-    
-    def to_dict(self, view_property=False):
-        if view_property:
-            return {
-                "id": self.id,
-                "name": self.name,
-                "email": self.email,
-                "properties": [p.to_dict() for p in self.properties],
-                "sent_messages": [m.to_dict() for m in self.sent_messages],
-                "received_messages": [m.to_dict() for m in self.received_messages],
-                "profile": self.profile.to_dict() if self.profile else None,
-                "role_id": self.role_id,
-                "followed": [user.id for user in self.followed],
-                "followers": [user.id for user in self.followers],
-            }
-        return {
-            "id": self.id,
-            "name": self.name,
-            "email": self.email,
-            "profile": self.profile,
-            "role_id": self.role_id,
-            "sent_messages": [m.to_dict() for m in self.sent_messages],
-            "received_messages": [m.to_dict() for m in self.received_messages],
-            "followed": [user.id for user in self.followed],
-            "followers": [user.id for user in self.followers],
-        }
 
     def like_property(self, property):
         if not self.has_liked_property(property):
@@ -116,8 +75,26 @@ class User(db.Model, SerializerMixin):
             db.session.commit()
     
     def has_liked_property(self, property):
-        return self.liked_properties.filter(
-            likes.c.property_id == property.id).count() > 0
+        return self.liked_properties.filter(likes.c.property_id == property.id).count() > 0
+
+    def to_dict(self, view_property=False):
+        data = {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "profile": self.profile.to_dict() if self.profile else None,
+            "role_id": self.role_id,
+            "sent_messages": [m.to_dict() for m in self.sent_messages],
+            "received_messages": [m.to_dict() for m in self.received_messages],
+            "followed": [user.id for user in self.followed],
+            "followers": [user.id for user in self.followers],
+        }
+        if view_property:
+            data["properties"] = [p.to_dict() for p in self.properties]
+        return data
+
+    def __repr__(self):
+        return f'<User {self.name}>'
 
 class Profile(db.Model, SerializerMixin):
     __tablename__ = 'profiles'
@@ -130,25 +107,24 @@ class Profile(db.Model, SerializerMixin):
     profile_pic = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    # One-to-One relationship with User
     user = db.relationship("User", back_populates="profile")
     
     serialize_rules = ("-user.profile",)
 
     def to_dict(self):
-        return{
-            "id":self.id,
-            "bio":self.bio,
-            "followers":self.followers,
-            "following":self.following,
-            "location":self.location,
-            "profile_pic":self.profile_pic,
-            "user_id":self.user_id,
-            "name":self.user.name,
+        return {
+            "id": self.id,
+            "bio": self.bio,
+            "followers": self.followers,
+            "following": self.following,
+            "location": self.location,
+            "profile_pic": self.profile_pic,
+            "user_id": self.user_id,
+            "name": self.user.name,
         }
 
     def __repr__(self):
-        return f'<Profile {self.user_id}, {self.role_id}>'
+        return f'<Profile {self.user_id}>'
 
 class Role(db.Model, SerializerMixin):
     __tablename__ = 'roles'
@@ -177,57 +153,40 @@ class Property(db.Model, SerializerMixin):
     parking = db.Column(db.Boolean)
     rooms = db.Column(db.Integer, default=0)
     available = db.Column(db.Boolean)
-    date_added = db.Column(db.DateTime,server_default=db.func.now())
+    date_added = db.Column(db.DateTime, server_default=db.func.now())
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     user = db.relationship('User', back_populates="properties")
     likers = db.relationship('User', secondary=likes, back_populates='liked_properties')
 
-    serialize_rules = ("-user.properties",)
+    serialize_rules = ("-user.properties", "-likers.liked_properties")
 
-    def __repr__(self):
-        return f'<Property {self.rent}, {self.location}>'
-    
     def to_dict(self, view_owner=False):
-        if view_owner:
-            return{
-                "id": self.id, 
-                "pic1": self.pic1, 
-                "pic2": self.pic2, 
-                "pic3": self.pic3, 
-                "description": self.description, 
-                "rent": self.rent, 
-                "location": self.location, 
-                "wifi": self.wifi,
-                "gated": self.gated,
-                "hot_shower": self.hot_shower,
-                "kitchen": self.kitchen,
-                "balcony": self.balcony,
-                "parking": self.parking,
-                "rooms": self.rooms,
-                "available": self.available,
-                "owner": self.user.name,
-                "owner_id": self.user_id
-            }
-        return{
+        data = {
             "id": self.id, 
             "pic1": self.pic1, 
             "pic2": self.pic2, 
             "pic3": self.pic3, 
             "description": self.description, 
             "rent": self.rent, 
-            "rooms": self.rooms,
             "location": self.location, 
             "wifi": self.wifi,
             "gated": self.gated,
             "hot_shower": self.hot_shower,
             "kitchen": self.kitchen,
             "balcony": self.balcony,
-            "parking": self.parking, 
+            "parking": self.parking,
+            "rooms": self.rooms,
             "available": self.available,
             "owner_id": self.user_id
         }
+        if view_owner:
+            data["owner"] = self.user.name
+        return data
+
+    def __repr__(self):
+        return f'<Property {self.rent}, {self.location}>'
 
 class Message(db.Model, SerializerMixin):
     __tablename__ = 'messages'
