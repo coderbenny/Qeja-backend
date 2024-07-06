@@ -179,7 +179,8 @@ class Property(db.Model, SerializerMixin):
             "parking": self.parking,
             "rooms": self.rooms,
             "available": self.available,
-            "owner_id": self.user_id
+            "owner_id": self.user_id,
+            "date_posted":self.date_added
         }
         if view_owner:
             data["owner"] = self.user.name

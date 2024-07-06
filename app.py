@@ -30,7 +30,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=30)
 jwt = JWTManager(app)
 
 # init cors
-CORS(app, supports_credentials=True)
+CORS(app)
 
 # init migration
 migrate = Migrate(app, db)
@@ -79,7 +79,7 @@ api.add_resource(Profiles, "/profiles") # Profiles Route
 api.add_resource(ProfileByID, "/profiles/<int:id>") # Profile By ID Route
 api.add_resource(FollowUser, "/follow/<int:user_id>") # Follow User Route
 api.add_resource(UnfollowUser, "/unfollow/<int:user_id>") # Unfollow User Route
-api.add_resource(SendMessage, "/send-message") # Unfollow User Route
+api.add_resource(SendMessage, "/send-message") # Route for Sending Message
 
 
 
