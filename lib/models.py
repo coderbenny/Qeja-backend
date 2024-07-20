@@ -22,12 +22,15 @@ class User(db.Model, SerializerMixin):
     phone = db.Column(db.String(100))
     password = db.Column(db.String)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    is_active = db.Column(db.Boolean, nullable=True, default=False)
+    activation_code = db.Column(db.Integer, nullable=True)
     date_added = db.Column(db.DateTime, server_default=db.func.now())
 
     profile = db.relationship("Profile", uselist=False, back_populates="user")
     properties = db.relationship("Property", back_populates="user")
     sent_messages = db.relationship("Message", foreign_keys="[Message.sender_id]", back_populates="sender")
     received_messages = db.relationship("Message", foreign_keys="[Message.receiver_id]", back_populates="receiver")
+
     role = db.relationship("Role")
     liked_properties = db.relationship('Property', secondary=likes, back_populates='likers')
     followed = db.relationship(
@@ -106,6 +109,7 @@ class Profile(db.Model, SerializerMixin):
     location = db.Column(db.String(100))
     profile_pic = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
 
     user = db.relationship("User", back_populates="profile")
     

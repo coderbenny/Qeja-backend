@@ -11,6 +11,8 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
+from flask_mail import Mail
+
 from lib import db, User, Profile, Property, Role, Message, followers, likes
 
 from routes import Index, Users, UserByID, Properties, PropertyByID, Roles, UsersByRole, Login, Logout, Whoami, RoomMates, RoommateByID, PropertyForSale, Profiles, ProfileByID, FollowUser, UnfollowUser, SendMessage
@@ -28,6 +30,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=30)
 jwt = JWTManager(app)
+
 
 # init cors
 CORS(app)
