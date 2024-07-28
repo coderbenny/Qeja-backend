@@ -87,6 +87,8 @@ class User(db.Model, SerializerMixin):
             "email": self.email,
             "profile": self.profile.to_dict() if self.profile else None,
             "role_id": self.role_id,
+            "is_active": self.is_active,
+            "activation_code": self.activation_code,
             "sent_messages": [m.to_dict() for m in self.sent_messages],
             "received_messages": [m.to_dict() for m in self.received_messages],
             "followed": [user.id for user in self.followed],
@@ -200,6 +202,7 @@ class Message(db.Model, SerializerMixin):
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content = db.Column(db.String)
+    img = db.Column(db.String, nullable=True)
     date_added = db.Column(db.DateTime,server_default=db.func.now())
 
     # Many-to-One relationship with User (sender)
