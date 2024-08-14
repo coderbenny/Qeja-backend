@@ -27,8 +27,8 @@ class UsersResource(Resource):
                     "role_id": user.role_id,
                     "is_active": user.is_active,
                     "profile": user.profile.to_dict() if user.profile else None,
-                    "followers":[u.id for u in user.followers], 
-                    "following": [u.id for u in user.followed]
+                    "following":[u.id for u in user.followers], 
+                    "followers": [u.id for u in user.followed]
                 }
                 response_data.append(user_dict)
 
@@ -46,8 +46,8 @@ class UsersResource(Resource):
                     "role_id": user.role_id,
                     "is_active": user.is_active,
                     "profile": user.profile.to_dict() if user.profile else None,
-                    "followers":[u.id for u in user.followers], 
-                    "following": [u.id for u in user.followed]
+                    "following":[u.id for u in user.followers], 
+                    "followers": [u.id for u in user.followed]
                 }),
             200
         )
