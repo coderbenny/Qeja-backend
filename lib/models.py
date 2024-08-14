@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
+from extensions import bcrypt
 
 db = SQLAlchemy()
 
@@ -20,7 +21,7 @@ class User(db.Model, SerializerMixin):
     name = db.Column(db.String)
     email = db.Column(db.String)
     phone = db.Column(db.String(100))
-    password = db.Column(db.String)
+    password_hash = db.Column(db.String(255))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     is_active = db.Column(db.Boolean, nullable=True, default=False)
     activation_code = db.Column(db.Integer, nullable=True)
@@ -97,6 +98,17 @@ class User(db.Model, SerializerMixin):
         if view_property:
             data["properties"] = [p.to_dict() for p in self.properties]
         return data
+    
+    @property
+    def password(self):
+        raise AttributeError('password not readable')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f'<User {self.name}>'

@@ -16,6 +16,7 @@ faker = "*"
 flask-jwt-extended = "*"
 gunicorn = "*"
 flask-mail = "*"
+flask-bcrypt = "*"
 
 [dev-packages]
 

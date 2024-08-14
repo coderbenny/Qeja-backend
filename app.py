@@ -10,7 +10,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required, JWTManager
 
 from lib import db, User, Message, Profile, Property
 from config import Config 
-from extensions import mail
+from extensions import mail, bcrypt
 
 # Load environment variables from .env file
 load_dotenv()
@@ -26,9 +26,10 @@ def create_app():
     CORS(app)
     migrate = Migrate(app, db)
     Session(app)
-    db.init_app(app)
     api = Api(app)
     mail.init_app(app)
+    bcrypt.init_app(app)
+    db.init_app(app)
 
     # JWT configuration
     @jwt.user_identity_loader

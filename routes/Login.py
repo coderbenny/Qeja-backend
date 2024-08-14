@@ -19,20 +19,25 @@ class Login(Resource):
         if not user:
             abort(404, description="User does not exist")
         
-        if user.password != password:
+        # Check if password is correct
+        if not user.check_password(password):
             abort(401, description="Wrong password")
-        
+
+        # Set user ID in session
         session["user_id"] = user.id
-        access_token = create_access_token(identity=user)
-        # access_token = create_access_token(identity=user.email)
         
-        # expiry = timedelta(days=1)
+        # Create JWT access token
+        access_token = create_access_token(identity=user, expires_delta=timedelta(days=1))
         
-        # response = make_response(
-        #     jsonify({"name":user.name,"role_id":user.role_id,"access_token":access_token}),
-        #     200
-        # )
-        # response.set_cookie('access_token', access_token, httponly=True)
-        # return response
+        # Return response with the token
+        response = make_response( 
+            jsonify({
+                "name": user.name,
+                "role_id": user.role_id,
+                "access_token": access_token
+            }), 200)
         
-        return jsonify(access_token=access_token)
+        # Set cookie if needed
+        response.set_cookie('access_token', access_token, httponly=True)
+
+        return response

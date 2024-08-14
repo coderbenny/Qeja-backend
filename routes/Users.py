@@ -47,36 +47,18 @@ class Users(Resource):
             return {"error": "User exists"}, 409
 
         try:
-            # Generate activation code
-            activation_code = f'{randint(100000, 999999):06d}'
+            # # Generate activation code
+            # activation_code = f'{randint(100000, 999999):06d}'
 
             new_user = User(name=name, email=email, password=password, role_id=role_id, activation_code=activation_code)
+            
+            activation_code = f'{randint(100000, 999999):06d}'
+
+            new_user.activation_code = activation_code
+            self.send_activation_email(new_user.name, new_user.email, activation_code)
+
             db.session.add(new_user)
             db.session.commit()
-
-            # Send activation email
-            # msg = Message(subject='Your Qeja Account Activation', recipients=[email])
-            # msg.html = f"""
-            # <html>
-            #     <body>
-            #         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
-            #             <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; border: 1px solid #e9ecef;">
-            #                 <h2 style="color: #343a40;">Welcome to Qeja!</h2>
-            #                 <p>Hello {name},</p>
-            #                 <p>Thank you for registering with Qeja. To complete your registration, please use the following activation code:</p>
-            #                 <p style="font-size: 20px; font-weight: bold;">{activation_code}</p>
-            #                 <p>If you did not request this registration, please ignore this email.</p>
-            #                 <p>Best regards,</p>
-            #                 <p>The Qeja Team</p>
-            #             </div>
-            #             <div style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 12px;">
-            #                 <p>&copy; 2024 Qeja, Inc. All rights reserved.</p>
-            #             </div>
-            #         </div>
-            #     </body>
-            # </html>
-            # """
-            # mail.send(msg)
 
             response = make_response(
                 jsonify(new_user.to_dict()),
@@ -86,6 +68,46 @@ class Users(Resource):
         except Exception as e:
             db.session.rollback()
             return {"error": str(e)}, 500
+        
+    def delete(self, id):
+        pass
+
+    # Function for sending email
+    def send_activation_email(self, name, recipient, activation_code):
+        msg = Message(
+            subject='Your Account Activation Code',
+            sender="Qeja <qeja.ke@gmail.com>",
+            recipients=[recipient]
+        )
+        msg.html = f"""
+            <html>
+                <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
+                    <div style="max-width: 600px; margin: 40px auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                        <div style="text-align: center;">
+                            <img src="https://your-logo-url.com/logo.png" alt="Qeja Logo" style="width: 120px; margin-bottom: 20px;">
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 30px; border-radius: 5px; border: 1px solid #e9ecef;">
+                            <h2 style="color: #343a40; text-align: center;">Welcome to Qeja!</h2>
+                            <p style="color: #343a40;">Hello {name},</p>
+                            <p style="color: #343a40;">Thank you for registering with Qeja. To complete your registration, please use the following activation code:</p>
+                            <p style="font-size: 24px; font-weight: bold; text-align: center; color: #007bff;">{activation_code}</p>
+                            <p style="color: #343a40;">If you did not request this registration, please ignore this email.</p>
+                            <p style="color: #343a40;">Best regards,</p>
+                            <p style="color: #343a40;">The Qeja Team</p>
+                        </div>
+                        <div style="text-align: center; margin-top: 30px; color: #6c757d; font-size: 12px;">
+                            <p>&copy; 2024 Qeja, Inc. All rights reserved.</p>
+                            <p><a href="https://qeja.com/privacy-policy" style="color: #007bff; text-decoration: none;">Privacy Policy</a> | <a href="https://qeja.com/terms" style="color: #007bff; text-decoration: none;">Terms of Service</a></p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        """
+
+        try:
+            mail.send(msg)
+        except Exception as e:
+            print(f"Failed to send activation email: {str(e)}")
 
 # Adding the Users resource to the API
 # api.add_resource(Users, '/users', resource_class_args=(mail,))
