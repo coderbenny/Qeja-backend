@@ -11,7 +11,7 @@ api = Api(users_bp)
 class UsersResource(Resource):
     
     # Retrieving user(s) from the database
-    def get(self, id):
+    def get(self, id=None):
         if not id:
             users = User.query.all()
 
