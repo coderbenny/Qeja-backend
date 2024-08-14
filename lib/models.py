@@ -32,20 +32,6 @@ class User(db.Model, SerializerMixin):
     sent_messages = db.relationship("Message", foreign_keys="[Message.sender_id]", back_populates="sender")
     received_messages = db.relationship("Message", foreign_keys="[Message.receiver_id]", back_populates="receiver")
 
-<<<<<<< HEAD
-=======
-    # One-to-Many relationship with Posts
-    posts = db.relationship("Post", back_populates="user")
-
-    followers = db.relationship(
-        'User', secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('following', lazy='dynamic'), lazy='dynamic'
-    )
-    
-    # One-to-One relationship with Role
->>>>>>> origin/main
     role = db.relationship("Role")
     liked_properties = db.relationship('Property', secondary=likes, back_populates='likers')
     followed = db.relationship(
@@ -154,21 +140,7 @@ class Profile(db.Model, SerializerMixin):
         }
 
     def __repr__(self):
-<<<<<<< HEAD
         return f'<Profile {self.user_id}>'
-=======
-        return f'<Profile {self.user_id}, {self.location}>'
-    
-    def to_dict(self):
-        return{
-            "id":self.id,
-            "role_id":self.role_id,
-            "bio":self.bio,
-            "location":self.location,
-            "profile_pic":self.profile_pic,
-            "user_id":self.user_id,
-        }
->>>>>>> origin/main
 
 class Role(db.Model, SerializerMixin):
     __tablename__ = 'roles'
