@@ -11,25 +11,47 @@ api = Api(users_bp)
 class UsersResource(Resource):
     
     # Retrieving user(s) from the database
-    def get(self):
-        users = User.query.all()
+    def get(self, id):
+        if not id:
+            users = User.query.all()
 
-        if not users:
-            return {"error": "No users found"}
+            if not users:
+                return {"error": "No users found"}
 
-        response_data = []
-        for user in users:
-            user_dict = {
-                "id": user.id,
-                "name": user.name,
-                "email": user.email,
-                "role_id": user.role_id,
-                "is_active": user.is_active,
-                "profile": user.profile.to_dict() if user.profile else None
-            }
-            response_data.append(user_dict)
+            response_data = []
+            for user in users:
+                user_dict = {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email,
+                    "role_id": user.role_id,
+                    "is_active": user.is_active,
+                    "profile": user.profile.to_dict() if user.profile else None,
+                    "followers":[u.id for u in user.followers], 
+                    "following": [u.id for u in user.followed]
+                }
+                response_data.append(user_dict)
 
-        response = make_response(jsonify(response_data), 200)
+            response = make_response(jsonify(response_data), 200)
+            return response
+        user = User.query.filter_by(id=id).first()
+        if not user:
+            return {"error":"User not found!"}, 404
+        
+        response = make_response(
+            jsonify({
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email,
+                    "role_id": user.role_id,
+                    "is_active": user.is_active,
+                    "profile": user.profile.to_dict() if user.profile else None,
+                    "followers":[u.id for u in user.followers], 
+                    "following": [u.id for u in user.followed]
+                }),
+            200
+        )
+
         return response
     
     # Adding new user & sending activation to email
@@ -130,6 +152,18 @@ class UsersResource(Resource):
                 200
             )
             return response
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 500
+        
+    def delete(self, id):
+        user = User.query.filter_by(id=id).first()
+        if not user:
+            return {"error":"User does not exist"}, 404
+        
+        try:
+            db.session.delete(user)
+            db.session.commit()
         except Exception as e:
             db.session.rollback()
             return {"error": str(e)}, 500

@@ -86,14 +86,14 @@ class User(db.Model, SerializerMixin):
             "id": self.id,
             "name": self.name,
             "email": self.email,
-            "profile": self.profile.to_dict() if self.profile else None,
+            "profile": self.profile.to_dict() if self.profile else {},
             "role_id": self.role_id,
             "is_active": self.is_active,
             "activation_code": self.activation_code,
             "sent_messages": [m.to_dict() for m in self.sent_messages],
             "received_messages": [m.to_dict() for m in self.received_messages],
             "followed": [user.id for user in self.followed],
-            "followers": [user.id for user in self.followers],
+            "followers": [user.id for user in self.followers]
         }
         if view_property:
             data["properties"] = [p.to_dict() for p in self.properties]
@@ -131,8 +131,8 @@ class Profile(db.Model, SerializerMixin):
         return {
             "id": self.id,
             "bio": self.bio,
-            "followers": self.followers,
-            "following": self.following,
+            # "followers": self.user.followers,
+            # "following": self.user.following,
             "location": self.location,
             "profile_pic": self.profile_pic,
             "user_id": self.user_id,
