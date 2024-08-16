@@ -92,8 +92,8 @@ class User(db.Model, SerializerMixin):
             "activation_code": self.activation_code,
             "sent_messages": [m.to_dict() for m in self.sent_messages],
             "received_messages": [m.to_dict() for m in self.received_messages],
-            "followed": [user.id for user in self.followed],
-            "followers": [user.id for user in self.followers]
+            "following": [user.id for user in self.followers],
+            "followers": [user.id for user in self.followed]
         }
         if view_property:
             data["properties"] = [p.to_dict() for p in self.properties]

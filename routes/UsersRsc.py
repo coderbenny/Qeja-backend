@@ -84,24 +84,24 @@ class UsersResource(Resource):
             # Send activation email
             msg = Message(subject='Your Qeja Account Activation Code', sender="Qeja <Qeja.ke@gmail.com>", recipients=[email])
             msg.html = f"""
-            <html>
-                <body>
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #f4f4f4; padding: 20px;">
-                        <div style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                            <h2 style="color: #343a40; text-align: center; margin-bottom: 20px;">Welcome to Qeja!</h2>
-                            <p style="font-size: 16px; color: #343a40;">Hello {name},</p>
-                            <p style="font-size: 16px; color: #343a40;">Thank you for registering with Qeja. To complete your registration, please use the following activation code:</p>
-                            <p style="font-size: 24px; font-weight: bold; text-align: center; margin: 20px 0; color: #007bff;">{activation_code}</p>
-                            <p style="font-size: 16px; color: #343a40;">If you did not request this registration, please ignore this email.</p>
-                            <p style="font-size: 16px; color: #343a40;">Best regards,</p>
-                            <p style="font-size: 16px; color: #343a40;">The Qeja Team</p>
+                <html>
+                    <body>
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #f4f4f4; padding: 20px;">
+                            <div style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                <h2 style="color: #343a40; text-align: center; margin-bottom: 20px;">Welcome to Qeja!</h2>
+                                <p style="font-size: 16px; color: #343a40;">Hello {name},</p>
+                                <p style="font-size: 16px; color: #343a40;">Thank you for registering with Qeja. To complete your registration, please use the following activation code:</p>
+                                <p style="font-size: 24px; font-weight: bold; text-align: center; margin: 20px 0; color: #007bff;">{activation_code}</p>
+                                <p style="font-size: 16px; color: #343a40;">If you did not request this registration, please ignore this email.</p>
+                                <p style="font-size: 16px; color: #343a40;">Best regards,</p>
+                                <p style="font-size: 16px; color: #343a40;">The Qeja Team</p>
+                            </div>
+                            <div style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 12px;">
+                                <p>&copy; 2024 Qeja, Inc. All rights reserved.</p>
+                            </div>
                         </div>
-                        <div style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 12px;">
-                            <p>&copy; 2024 Qeja, Inc. All rights reserved.</p>
-                        </div>
-                    </div>
-                </body>
-            </html>
+                    </body>
+                </html>
             """
 
             mail.send(msg)
@@ -155,7 +155,8 @@ class UsersResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {"error": str(e)}, 500
-        
+    
+    
     def delete(self, id):
         user = User.query.filter_by(id=id).first()
         if not user:

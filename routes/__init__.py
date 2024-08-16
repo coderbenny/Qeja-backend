@@ -19,3 +19,4 @@ from .SendMessage import SendMessage
 from .Activation import Activation
 
 from .UsersRsc import users_bp
+from .MatesRsc import mates_bp
