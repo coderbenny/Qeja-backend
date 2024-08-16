@@ -44,23 +44,23 @@ def create_app():
     # Import routes
     from routes import (
         Index, Roles, 
-        UsersByRole, Login, Logout, Whoami, PropertyForSale, Profiles, ProfileByID, FollowUser, UnfollowUser, 
-        SendMessage, Activation, users_bp, mates_bp, properties_bp
+        UsersByRole, Login, Logout, Whoami, FollowUser, UnfollowUser, 
+        SendMessage, Activation, users_bp, mates_bp, properties_bp, profiles_bp
     )
     
     # Add resources
     api.add_resource(Index, "/")
+    
     api.add_resource(Roles, "/roles")
     api.add_resource(UsersByRole, "/users/roles/<int:roleId>")
+
     api.add_resource(Login, "/login")
     api.add_resource(Logout, "/logout")
     api.add_resource(Whoami, "/whoami")
     
-    api.add_resource(PropertyForSale, "/for-sale")
-    api.add_resource(Profiles, "/profiles")
-    api.add_resource(ProfileByID, "/profiles/<int:id>")
     api.add_resource(FollowUser, "/follow/<int:user_id>")
     api.add_resource(UnfollowUser, "/unfollow/<int:user_id>")
+
     api.add_resource(SendMessage, "/send-message")
     api.add_resource(Activation, "/activate")
 
@@ -68,6 +68,7 @@ def create_app():
     app.register_blueprint(users_bp)
     app.register_blueprint(mates_bp)
     app.register_blueprint(properties_bp)
+    app.register_blueprint(profiles_bp)
 
     return app
 

@@ -9,11 +9,6 @@ from .Whoami import Whoami
 from .Activation import Activation
 from .SendMessage import SendMessage
 
-from .PropertyForSale import PropertyForSale
-
-from .Profiles import Profiles
-from .ProfileByID import ProfileByID
-
 from .FollowUser import FollowUser
 from .UnfollowUser import UnfollowUser
 
@@ -21,3 +16,4 @@ from .UnfollowUser import UnfollowUser
 from .UsersRsc import users_bp
 from .MatesRsc import mates_bp
 from .PropertiesRsc import properties_bp
+from .ProfilesRsc import profiles_bp
