@@ -43,28 +43,18 @@ def create_app():
 
     # Import routes
     from routes import (
-        Index, Properties, PropertyByID, Roles, 
-        UsersByRole, Login, Logout, Whoami, RoomMates, RoommateByID, 
-        PropertyForSale, Profiles, ProfileByID, FollowUser, UnfollowUser, 
-        SendMessage, Activation, users_bp, mates_bp
+        Index, Roles, 
+        UsersByRole, Login, Logout, Whoami, PropertyForSale, Profiles, ProfileByID, FollowUser, UnfollowUser, 
+        SendMessage, Activation, users_bp, mates_bp, properties_bp
     )
     
     # Add resources
     api.add_resource(Index, "/")
-    
-    # api.add_resource(Users, '/users', resource_class_args=(mail,))
-    # api.add_resource(UserByID, "/users/<int:id>")
-
-    api.add_resource(Properties, "/properties")
-    api.add_resource(PropertyByID, "/properties/<int:id>")
     api.add_resource(Roles, "/roles")
     api.add_resource(UsersByRole, "/users/roles/<int:roleId>")
     api.add_resource(Login, "/login")
     api.add_resource(Logout, "/logout")
     api.add_resource(Whoami, "/whoami")
-
-    # api.add_resource(RoomMates, "/roommates")
-    # api.add_resource(RoommateByID, "/roommates/<int:id>")
     
     api.add_resource(PropertyForSale, "/for-sale")
     api.add_resource(Profiles, "/profiles")
@@ -74,8 +64,10 @@ def create_app():
     api.add_resource(SendMessage, "/send-message")
     api.add_resource(Activation, "/activate")
 
+    # Blueprints
     app.register_blueprint(users_bp)
     app.register_blueprint(mates_bp)
+    app.register_blueprint(properties_bp)
 
     return app
 
