@@ -92,8 +92,8 @@ class User(db.Model, SerializerMixin):
             "activation_code": self.activation_code,
             "sent_messages": [m.to_dict() for m in self.sent_messages],
             "received_messages": [m.to_dict() for m in self.received_messages],
-            "following": [user.id for user in self.followers],
-            "followers": [user.id for user in self.followed]
+            "following": [user.id for user in self.followed],
+            "followers": [user.id for user in self.followers]
         }
         if view_property:
             data["properties"] = [p.to_dict() for p in self.properties]
@@ -158,17 +158,17 @@ class Property(db.Model, SerializerMixin):
     pic1 = db.Column(db.String)
     pic2 = db.Column(db.String)
     pic3 = db.Column(db.String)
-    description = db.Column(db.String)
-    location = db.Column(db.String)
-    rent = db.Column(db.String)
-    wifi = db.Column(db.Boolean)
-    gated = db.Column(db.Boolean)
-    hot_shower = db.Column(db.Boolean)
-    kitchen = db.Column(db.Boolean)
-    balcony = db.Column(db.Boolean)
-    parking = db.Column(db.Boolean)
-    rooms = db.Column(db.Integer, default=0)
-    available = db.Column(db.Boolean)
+    description = db.Column(db.String, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    rent = db.Column(db.String, nullable=False)
+    wifi = db.Column(db.Boolean, nullable=False, default=False)
+    gated = db.Column(db.Boolean, nullable=False, default=False)
+    hot_shower = db.Column(db.Boolean, nullable=False, default=False)
+    kitchen = db.Column(db.Boolean, nullable=False, default=False)
+    balcony = db.Column(db.Boolean, nullable=False, default=False)
+    parking = db.Column(db.Boolean, nullable=False, default=False)
+    rooms = db.Column(db.Integer, default=1)
+    available = db.Column(db.Boolean, nullable=False, default=False)
     date_added = db.Column(db.DateTime, server_default=db.func.now())
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

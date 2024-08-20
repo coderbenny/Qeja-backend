@@ -61,7 +61,7 @@ class PropertiesResource(Resource):
         rooms = data.get("rooms")
         user_id = user_id
     
-        if not all([ description, location, rent, wifi, gated, available, rooms, user_id]):
+        if not all([ description, location, rent, wifi, gated, available, rooms, user_id, pic1, pic2, pic3]):
             return {"error":"Invalid data"}, 400
         
         try:

@@ -19,6 +19,10 @@ class Follow(Resource):
         if current_user.is_following(user_to_follow):
             return {'message': 'You are already following this user'}, 200
 
-        current_user.follow(user_to_follow)
-        db.session.commit()
-        return {'message': 'You are now following this user'}, 200
+        try:
+            current_user.follow(user_to_follow)
+            db.session.commit()
+            return {'message': 'You are now following this user'}, 200
+        except Exception as e:
+            db.session.rollback()
+            return {"error":str(e)}, 500

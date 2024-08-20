@@ -9,7 +9,7 @@ class Activation(Resource):
         email = data.get('email')
         activation_code = data.get('activation_code')
 
-        if not email or not activation_code:
+        if not data or not all([email, activation_code]):
             return {'message': 'Email and activation code are required'}, 400
 
         user = User.query.filter_by(email=email).first()
@@ -22,9 +22,12 @@ class Activation(Resource):
 
         if user.activation_code != activation_code:
             return {'message': 'Invalid activation code'}, 400
-
-        user.is_active = True
-        user.activation_code = None  
-        db.session.commit()
-
-        return jsonify({'message': 'Account activated successfully'}), 200
+        
+        try:
+            user.is_active = True
+            user.activation_code = None  
+            db.session.commit()
+            return {'message': 'Account activated successfully'}, 200
+        except Exception as e:
+            db.session.rollback()
+            return {"error":str(e)}, 500

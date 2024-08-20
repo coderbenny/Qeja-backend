@@ -5,7 +5,7 @@ from lib import db, User
 
 class Unfollow(Resource):
 
-    def post(self, user_id):
+    def delete(self, user_id):
         current_user_id = request.json.get('current_user_id')
         user_to_unfollow = User.query.get(user_id)
         current_user = User.query.get(current_user_id)

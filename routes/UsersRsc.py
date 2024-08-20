@@ -27,8 +27,8 @@ class UsersResource(Resource):
                     "role_id": user.role_id,
                     "is_active": user.is_active,
                     "profile": user.profile.to_dict() if user.profile else None,
-                    "following":[u.id for u in user.followers], 
-                    "followers": [u.id for u in user.followed]
+                    "following":[u.id for u in user.followed], 
+                    "followers": [u.id for u in user.followers]
                 }
                 response_data.append(user_dict)
 
@@ -46,8 +46,8 @@ class UsersResource(Resource):
                     "role_id": user.role_id,
                     "is_active": user.is_active,
                     "profile": user.profile.to_dict() if user.profile else None,
-                    "following":[u.id for u in user.followers], 
-                    "followers": [u.id for u in user.followed]
+                    "followers":[u.id for u in user.followers], 
+                    "following": [u.id for u in user.followed]
                 }),
             200
         )
@@ -143,12 +143,13 @@ class UsersResource(Resource):
         profile.bio = data.get("bio", profile.bio)
         profile.location = data.get("location", profile.location)
         profile.profile_pic = data.get("profile_pic", profile.profile_pic)
+        user.is_active = data.get("is_active", user.is_active)
 
         try:
             db.session.add(profile)  # Add profile to session if it was newly created
             db.session.commit()
             response = make_response(
-                jsonify(user.profile.to_dict()), 
+                jsonify(user.to_dict()), 
                 200
             )
             return response
