@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from datetime import timedelta
 from flask_jwt_extended import get_jwt_identity, jwt_required, JWTManager
 
-from lib import db, User, Message, Profile, Property
+from lib import db, User, Message, Profile, Property, Post
 from config import Config 
 from extensions import mail, bcrypt
 
@@ -45,7 +45,7 @@ def create_app():
     from routes import (
         Index, Roles, 
         UsersByRole, Login, Logout, Whoami, FollowUser, UnfollowUser, 
-        SendMessage, Activation, users_bp, mates_bp, properties_bp, profiles_bp
+        SendMessage, Activation, users_bp, mates_bp, properties_bp, profiles_bp, posts_bp
     )
     
     # Add resources
@@ -64,11 +64,13 @@ def create_app():
     api.add_resource(SendMessage, "/send-message")
     api.add_resource(Activation, "/activate")
 
+
     # Blueprints
     app.register_blueprint(users_bp)
     app.register_blueprint(mates_bp)
     app.register_blueprint(properties_bp)
     app.register_blueprint(profiles_bp)
+    app.register_blueprint(posts_bp)
 
     return app
 

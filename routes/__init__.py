@@ -17,3 +17,4 @@ from .UsersRsc import users_bp
 from .MatesRsc import mates_bp
 from .PropertiesRsc import properties_bp
 from .ProfilesRsc import profiles_bp
+from .PostsRsc import posts_bp

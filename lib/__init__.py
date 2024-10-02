@@ -6,3 +6,4 @@ from .models import Role
 from .models import Message
 from .models import followers
 from .models import likes
+from .models import Post

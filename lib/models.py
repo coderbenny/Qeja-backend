@@ -223,3 +223,26 @@ class Message(db.Model, SerializerMixin):
 
     serialize_rules = ("-receiver.received_messages", "-sender.sent_messages")
 
+    def __repr__(self):
+        return f"<Message {self.sender_id} sent {self.content} on {self.date_added}>"
+
+
+class Post(db.Model, SerializerMixin):
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    content = db.Column(db.String(255), nullable=False)
+    pic1 = db.Column(db.String, nullable=True)
+    pic2 = db.Column(db.String, nullable=True)
+    pic3 = db.Column(db.String, nullable=True)
+    date_added = db.Column(db.DateTime,server_default=db.func.now())
+
+    # Relationship with user 
+    user = db.relationship('User', back_populates="posts")
+
+    serialize_rules = ("-user.posts",)
+
+    def __repr__(self):
+        return f"<Post {self.user_id} posted {self.content}>"
+    
