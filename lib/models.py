@@ -31,6 +31,7 @@ class User(db.Model, SerializerMixin):
     properties = db.relationship("Property", back_populates="user")
     sent_messages = db.relationship("Message", foreign_keys="[Message.sender_id]", back_populates="sender")
     received_messages = db.relationship("Message", foreign_keys="[Message.receiver_id]", back_populates="receiver")
+    posts = db.relationship("Post", back_populates="user")
 
     role = db.relationship("Role")
     liked_properties = db.relationship('Property', secondary=likes, back_populates='likers')
@@ -58,7 +59,8 @@ class User(db.Model, SerializerMixin):
     def followed_posts(self):
         return Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
-                followers.c.follower_id == self.id).order_by(Post.timestamp.desc())
+                followers.c.follower_id == self.id).order_by(Post.date_added.desc())  # Changed Post.timestamp to date_added
+
 
     @property
     def followed_count(self):
@@ -93,7 +95,8 @@ class User(db.Model, SerializerMixin):
             "sent_messages": [m.to_dict() for m in self.sent_messages],
             "received_messages": [m.to_dict() for m in self.received_messages],
             "following": [user.id for user in self.followed],
-            "followers": [user.id for user in self.followers]
+            "followers": [user.id for user in self.followers],
+            "posts": [p.to_dict() for p in self.posts] 
         }
         if view_property:
             data["properties"] = [p.to_dict() for p in self.properties]
