@@ -8,7 +8,7 @@
 A **RESTful API backend** built with **Flask**, powering the **Qeja Real Estate Platform**.
 Handles authentication, property listings, messaging, social interactions, and community features.
 
-**[Frontend Repository](https://github.com/yourusername/qeja-frontend)** •
+**[Frontend Repository](https://github.com/coderbenny/qeja-frontend)** •
 **[Report Bug](../../issues)** • **[Request Feature](../../issues)**
 
 ---
