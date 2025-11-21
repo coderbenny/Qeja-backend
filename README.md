@@ -1,43 +1,49 @@
-```markdown
-# Qeja Backend - Real Estate Platform API
+# Qeja Backend — Real Estate Platform API
 
-<div align="center">
+[![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=for-the-badge\&logo=flask\&logoColor=white)](https://flask.palletsprojects.com/)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)](https://www.python.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge\&logo=sqlite\&logoColor=white)](https://www.sqlite.org/)
+[![Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge\&logo=render\&logoColor=white)](https://render.com/)
 
-[![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![Deployed on Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
+A **RESTful API backend** built with **Flask**, powering the **Qeja Real Estate Platform**.
+Handles authentication, property listings, messaging, social interactions, and community features.
 
-**RESTful API backend for the Qeja real estate platform**
-
-[Frontend Repository](https://github.com/yourusername/qeja-frontend) • [Report Bug](../../issues) • [Request Feature](../../issues)
-
-</div>
+**[Frontend Repository](https://github.com/yourusername/qeja-frontend)** •
+**[Report Bug](../../issues)** • **[Request Feature](../../issues)**
 
 ---
 
 ## 📋 Table of Contents
 
-- [About](#about)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Database Schema](#database-schema)
-- [API Endpoints](#api-endpoints)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Environment Variables](#environment-variables)
-- [Project Structure](#project-structure)
-- [Authentication](#authentication)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
+* [About](#about)
+* [Features](#features)
+* [Tech Stack](#tech-stack)
+* [Database Schema](#database-schema)
+* [API Endpoints](#api-endpoints)
+* [Getting Started](#getting-started)
+
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+  * [Environment Variables](#environment-variables)
+* [Project Structure](#project-structure)
+* [Authentication](#authentication)
+* [Deployment](#deployment)
+* [Contributing](#contributing)
+* [License](#license)
 
 ---
 
 ## 🎯 About
 
-The Qeja Backend is a robust Flask-based RESTful API that powers the Qeja real estate platform. It handles user authentication, property management, messaging, social features (following/followers), and community posts. Built with scalability and security in mind, it provides a comprehensive backend solution for real estate applications.
+The **Qeja Backend** is a scalable Flask-based API for managing real estate operations including:
+
+* User management
+* Property listings
+* Messaging
+* Community posts
+* Social interactions (follow, like)
+
+Built to be secure, efficient, and suitable for production-ready deployments.
 
 ---
 
@@ -45,128 +51,137 @@ The Qeja Backend is a robust Flask-based RESTful API that powers the Qeja real e
 
 ### Core Functionality
 
-- **🔐 User Authentication & Authorization**: JWT-based authentication with role-based access control
-- **👤 User Management**: Registration, activation, profile management, and role assignment
-- **🏡 Property Management**: CRUD operations for rental and sale properties with image support
-- **💬 Real-Time Messaging**: User-to-user messaging system with image attachments
-- **👥 Social Features**: Follow/unfollow users, like properties, view followers/following
-- **📝 Community Forum**: Create, read, update, and delete posts with multimedia support
-- **📧 Email Notifications**: Account activation and notification system via Flask-Mail
-- **🔒 Password Security**: Bcrypt password hashing for secure authentication
-- **🔄 Database Migrations**: Alembic/Flask-Migrate for version-controlled schema changes
+* 🔐 **JWT Authentication** with role-based access control
+* 👤 **User Management** (profiles, activation, roles)
+* 🏡 **Property Listings** with amenities & images
+* 💬 **Real-Time Messaging** with optional image attachments
+* 👥 **Social Features** (follow/unfollow, like properties)
+* 📝 **Community Forum** with multimedia posts
+* 📧 **Email Notifications** using Flask-Mail
+* 🔒 **Secure Password Hashing** (Bcrypt)
+* 🔄 **Database Migrations** (Flask-Migrate / Alembic)
 
 ---
 
 ## 🛠 Tech Stack
 
-### Core Framework
-- **Flask 2.x**: Lightweight WSGI web application framework
-- **Flask-RESTful**: Extension for building REST APIs
-- **Python 3.8+**: Programming language
+### Backend Framework
+
+* Flask 2.x
+* Flask-RESTful
+* Python 3.8+
 
 ### Database & ORM
-- **SQLite**: Lightweight relational database
-- **SQLAlchemy**: SQL toolkit and ORM
-- **Flask-SQLAlchemy**: Flask extension for SQLAlchemy
-- **SQLAlchemy-Serializer**: Automatic serialization of SQLAlchemy models
+
+* SQLite
+* SQLAlchemy
+* Flask-SQLAlchemy
+* SQLAlchemy-Serializer
 
 ### Authentication & Security
-- **Flask-JWT-Extended**: JWT token management
-- **Flask-Bcrypt**: Password hashing
-- **Flask-CORS**: Cross-Origin Resource Sharing support
+
+* Flask-JWT-Extended
+* Flask-Bcrypt
+* Flask-CORS
 
 ### Additional Extensions
-- **Flask-Mail**: Email sending capabilities
-- **Flask-Session**: Server-side session management
-- **Flask-Migrate**: Database migration handling
-- **python-dotenv**: Environment variable management
+
+* Flask-Mail
+* Flask-Session
+* Flask-Migrate
+* python-dotenv
 
 ---
 
 ## 🗄 Database Schema
 
-### Models Overview
+### User Model
 
-#### **User Model**
-Primary user entity with authentication and profile data.
+Stores user authentication and profile info.
 
 **Fields:**
-- `id`: Primary key
-- `name`: User's full name
-- `email`: Unique email address
-- `phone`: Contact number
-- `password_hash`: Encrypted password
-- `role_id`: Foreign key to Role
-- `is_active`: Account activation status
-- `activation_code`: Email verification code
-- `date_added`: Registration timestamp
+
+* `id`, `name`, `email`, `phone`
+* `password_hash`
+* `role_id`
+* `is_active`, `activation_code`
+* `date_added`
 
 **Relationships:**
-- One-to-One: `Profile`
-- One-to-Many: `Properties`, `Posts`, `Messages` (sent/received)
-- Many-to-Many: `Followers`, `Liked Properties`
 
-#### **Profile Model**
-Extended user information.
+* One-to-One: `Profile`
+* One-to-Many: `Properties`, `Posts`, `Messages`
+* Many-to-Many: Followers, Liked Properties
 
-**Fields:**
-- `id`: Primary key
-- `bio`: User biography
-- `location`: User's location
-- `profile_pic`: Profile picture URL
-- `user_id`: Foreign key to User
+---
 
-#### **Property Model**
-Real estate listings.
+### Profile Model
 
-**Fields:**
-- `id`: Primary key
-- `pic1`, `pic2`, `pic3`: Property images
-- `description`: Property details
-- `location`: Property address
-- `rent`: Rental/sale price
-- `wifi`, `gated`, `hot_shower`, `kitchen`, `balcony`, `parking`: Boolean amenities
-- `rooms`: Number of rooms
-- `available`: Availability status
-- `user_id`: Property owner (Foreign key)
-- `date_added`: Listing timestamp
+Stores extended user details:
+
+* `bio`, `location`, `profile_pic`
+* `user_id` (FK)
+
+---
+
+### Property Model
+
+Real estate listing details.
+
+**Fields include:**
+
+* `id`
+* `pic1`, `pic2`, `pic3`
+* `description`
+* `location`
+* `rent`
+* amenity booleans (`wifi`, `gated`, `hot_shower`, etc.)
+* `rooms`, `available`
+* `user_id`
+* `date_added`
 
 **Relationships:**
-- Many-to-One: `User` (owner)
-- Many-to-Many: `Users` (likers)
 
-#### **Message Model**
-User-to-user messaging.
+* Many-to-One: Owner (User)
+* Many-to-Many: Likers
 
-**Fields:**
-- `id`: Primary key
-- `sender_id`: Foreign key to User
-- `receiver_id`: Foreign key to User
-- `content`: Message text
-- `img`: Optional image attachment
-- `date_added`: Timestamp
+---
 
-#### **Post Model**
-Community forum posts.
+### Message Model
 
-**Fields:**
-- `id`: Primary key
-- `user_id`: Foreign key to User
-- `content`: Post content (max 255 chars)
-- `pic1`, `pic2`, `pic3`: Optional images
-- `date_added`: Post timestamp
+User-to-user messages.
 
-#### **Role Model**
-User role definitions (e.g., Admin, User, Agent).
+* `sender_id`, `receiver_id`
+* `content`
+* `img` (optional)
+* `date_added`
 
-**Fields:**
-- `id`: Primary key
-- `title`: Role name
+---
+
+### Post Model
+
+Community posts.
+
+* `id`, `user_id`
+* `content`
+* `pic1`, `pic2`, `pic3`
+* `date_added`
+
+---
+
+### Role Model
+
+Defines user roles.
+
+* `id`
+* `title`
+
+---
 
 ### Association Tables
 
-- **followers**: Many-to-Many relationship between Users (follower/followed)
-- **likes**: Many-to-Many relationship between Users and Properties
+* `followers`: User ↔ User
+* `likes`: User ↔ Properties
 
 ---
 
@@ -174,73 +189,87 @@ User role definitions (e.g., Admin, User, Agent).
 
 ### Authentication
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/login` | User login | No |
-| POST | `/logout` | User logout | Yes |
-| GET | `/whoami` | Get current user info | Yes |
-| POST | `/activate` | Activate user account | No |
+| Method | Endpoint    | Description      | Auth |
+| ------ | ----------- | ---------------- | ---- |
+| POST   | `/login`    | Login a user     | ❌    |
+| POST   | `/logout`   | Logout user      | ✔    |
+| GET    | `/whoami`   | Get current user | ✔    |
+| POST   | `/activate` | Activate account | ❌    |
+
+---
 
 ### Users
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/users` | Get all users | Yes |
-| POST | `/users` | Register new user | No |
-| GET | `/users/<id>` | Get user by ID | Yes |
-| PATCH | `/users/<id>` | Update user | Yes |
-| DELETE | `/users/<id>` | Delete user | Yes |
-| GET | `/users/roles/<roleId>` | Get users by role | Yes |
+| Method | Endpoint                | Description       | Auth |
+| ------ | ----------------------- | ----------------- | ---- |
+| GET    | `/users`                | List all users    | ✔    |
+| POST   | `/users`                | Register user     | ❌    |
+| GET    | `/users/<id>`           | Get user          | ✔    |
+| PATCH  | `/users/<id>`           | Update user       | ✔    |
+| DELETE | `/users/<id>`           | Delete user       | ✔    |
+| GET    | `/users/roles/<roleId>` | Get users by role | ✔    |
+
+---
 
 ### Properties
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/properties` | Get all properties | No |
-| POST | `/properties` | Create property | Yes |
-| GET | `/properties/<id>` | Get property by ID | No |
-| PATCH | `/properties/<id>` | Update property | Yes |
-| DELETE | `/properties/<id>` | Delete property | Yes |
+| Method | Endpoint           | Description     | Auth |
+| ------ | ------------------ | --------------- | ---- |
+| GET    | `/properties`      | All properties  | ❌    |
+| POST   | `/properties`      | Create property | ✔    |
+| GET    | `/properties/<id>` | Get property    | ❌    |
+| PATCH  | `/properties/<id>` | Update property | ✔    |
+| DELETE | `/properties/<id>` | Delete property | ✔    |
+
+---
 
 ### Profiles
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/profiles` | Get all profiles | Yes |
-| POST | `/profiles` | Create profile | Yes |
-| GET | `/profiles/<id>` | Get profile by ID | Yes |
-| PATCH | `/profiles/<id>` | Update profile | Yes |
-| DELETE | `/profiles/<id>` | Delete profile | Yes |
+| Method | Endpoint         | Description    | Auth |
+| ------ | ---------------- | -------------- | ---- |
+| GET    | `/profiles`      | All profiles   | ✔    |
+| POST   | `/profiles`      | Create profile | ✔    |
+| GET    | `/profiles/<id>` | Get profile    | ✔    |
+| PATCH  | `/profiles/<id>` | Update profile | ✔    |
+| DELETE | `/profiles/<id>` | Delete profile | ✔    |
+
+---
 
 ### Posts
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/posts` | Get all posts | Yes |
-| POST | `/posts` | Create post | Yes |
-| GET | `/posts/<id>` | Get post by ID | Yes |
-| PATCH | `/posts/<id>` | Update post | Yes |
-| DELETE | `/posts/<id>` | Delete post | Yes |
+| Method | Endpoint      | Description | Auth |
+| ------ | ------------- | ----------- | ---- |
+| GET    | `/posts`      | All posts   | ✔    |
+| POST   | `/posts`      | Create post | ✔    |
+| GET    | `/posts/<id>` | Get post    | ✔    |
+| PATCH  | `/posts/<id>` | Update post | ✔    |
+| DELETE | `/posts/<id>` | Delete post | ✔    |
+
+---
 
 ### Social Features
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/follow/<user_id>` | Follow a user | Yes |
-| DELETE | `/unfollow/<user_id>` | Unfollow a user | Yes |
-| GET | `/mates` | Get user's social network | Yes |
+| Method | Endpoint              | Description             | Auth |
+| ------ | --------------------- | ----------------------- | ---- |
+| POST   | `/follow/<user_id>`   | Follow a user           | ✔    |
+| DELETE | `/unfollow/<user_id>` | Unfollow                | ✔    |
+| GET    | `/mates`              | Get followers/following | ✔    |
+
+---
 
 ### Messaging
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/send-message` | Send message to user | Yes |
+| Method | Endpoint        | Description  | Auth |
+| ------ | --------------- | ------------ | ---- |
+| POST   | `/send-message` | Send message | ✔    |
+
+---
 
 ### Roles
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/roles` | Get all roles | Yes |
+| Method | Endpoint | Description | Auth |
+| ------ | -------- | ----------- | ---- |
+| GET    | `/roles` | List roles  | ✔    |
 
 ---
 
@@ -248,85 +277,61 @@ User role definitions (e.g., Admin, User, Agent).
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- pip (Python package manager)
-- Virtual environment (recommended)
-- SQLite (included with Python)
+* Python 3.8+
+* pip
+* Virtual environment
+* SQLite (bundled with Python)
+
+---
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/qeja-backend.git
-   cd qeja-backend
-   ```
+```bash
+git clone https://github.com/coderbenny/qeja-backend.git
+cd qeja-backend
+```
 
-2. **Create and activate virtual environment**
-   ```bash
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
+Create and activate a virtual environment:
 
-   # macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+```bash
+python3 -m venv venv
+source venv/bin/activate     # Mac/Linux
+venv\Scripts\activate        # Windows
+```
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+Install dependencies:
 
-4. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   SECRET_KEY=your_secret_key_here
-   JWT_SECRET_KEY=your_jwt_secret_key_here
-   DATABASE_URL=sqlite:///qeja.db
-   
-   # Flask Mail Configuration
-   MAIL_SERVER=smtp.gmail.com
-   MAIL_PORT=587
-   MAIL_USE_TLS=True
-   MAIL_USERNAME=your_email@gmail.com
-   MAIL_PASSWORD=your_app_password
-   MAIL_DEFAULT_SENDER=your_email@gmail.com
-   
-   # Flask Configuration
-   FLASK_ENV=development
-   FLASK_DEBUG=True
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-5. **Initialize the database**
-   ```bash
-   flask db init
-   flask db migrate -m "Initial migration"
-   flask db upgrade
-   ```
+Run migrations:
 
-6. **Run the application**
-   ```bash
-   python app.py
-   ```
+```bash
+flask db upgrade
+```
 
-   The API will be available at `http://localhost:5555`
+Start the development server:
+
+```bash
+flask run
+```
+
+---
 
 ### Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `SECRET_KEY` | Flask secret key for sessions | Yes |
-| `JWT_SECRET_KEY` | Secret key for JWT token generation | Yes |
-| `DATABASE_URL` | Database connection string | Yes |
-| `MAIL_SERVER` | SMTP server address | Yes |
-| `MAIL_PORT` | SMTP server port | Yes |
-| `MAIL_USE_TLS` | Enable TLS for email | Yes |
-| `MAIL_USERNAME` | Email account username | Yes |
-| `MAIL_PASSWORD` | Email account password/app password | Yes |
-| `MAIL_DEFAULT_SENDER` | Default sender email address | Yes |
-| `FLASK_ENV` | Environment (development/production) | No |
-| `FLASK_DEBUG` | Enable debug mode | No |
+Create a `.env` file:
+
+```
+FLASK_APP=app
+FLASK_ENV=development
+SECRET_KEY=your-secret-key
+JWT_SECRET_KEY=jwt-secret-key
+MAIL_USERNAME=you@example.com
+MAIL_PASSWORD=yourpassword
+DATABASE_URL=sqlite:///qeja.db
+```
 
 ---
 
@@ -334,235 +339,69 @@ User role definitions (e.g., Admin, User, Agent).
 
 ```
 qeja-backend/
-├── app.py                  # Application entry point
-├── config.py               # Configuration settings
-├── extensions.py           # Flask extensions initialization
-├── requirements.txt        # Python dependencies
-├── .env                    # Environment variables (not in repo)
-├── lib/
+│── app/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
 │   ├── __init__.py
-│   └── models.py          # SQLAlchemy models
-├── routes/
-│   ├── __init__.py
-│   ├── Index.py           # Root endpoint
-│   ├── Login.py           # Authentication routes
-│   ├── Logout.py
-│   ├── Whoami.py
-│   ├── Activation.py
-│   ├── Roles.py           # Role management
-│   ├── UsersByRole.py
-│   ├── FollowUser.py      # Social features
-│   ├── UnfollowUser.py
-│   ├── SendMessage.py     # Messaging
-│   ├── UsersRsc.py        # User CRUD (Blueprint)
-│   ├── PropertiesRsc.py   # Property CRUD (Blueprint)
-│   ├── ProfilesRsc.py     # Profile CRUD (Blueprint)
-│   ├── PostsRsc.py        # Post CRUD (Blueprint)
-│   └── MatesRsc.py        # Social network (Blueprint)
-└── migrations/            # Database migrations
+│── migrations/
+│── venv/
+│── requirements.txt
+│── config.py
+│── run.py
+│── README.md
 ```
 
 ---
 
 ## 🔐 Authentication
 
-The API uses **JWT (JSON Web Tokens)** for authentication.
-
-### Authentication Flow
-
-1. **Registration**: POST to `/users` with user details
-2. **Activation**: POST to `/activate` with activation code sent via email
-3. **Login**: POST to `/login` with credentials
-4. **Access Protected Routes**: Include JWT token in Authorization header
-
-### Using JWT Tokens
-
-Include the JWT token in the Authorization header for protected routes:
-
-```bash
-Authorization: Bearer <your_jwt_token>
-```
-
-### Example Login Request
-
-```bash
-curl -X POST http://localhost:5555/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "your_password"
-  }'
-```
-
-### Example Protected Request
-
-```bash
-curl -X GET http://localhost:5555/whoami \
-  -H "Authorization: Bearer <your_jwt_token>"
-```
+* JWT-based
+* Access + Refresh tokens
+* Account activation via email
+* Role-based permissions
 
 ---
 
-## 🌐 Deployment
+## 🚀 Deployment
 
-### Deploying to Render
+The app can be deployed on:
 
-1. **Create a new Web Service on Render**
+* Render
+* Railway
+* DigitalOcean
+* AWS
+* Any WSGI-compatible provider
 
-2. **Configure Build & Start Commands**
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
+Ensure you use:
 
-3. **Add Environment Variables**
-   - Add all variables from your `.env` file in the Render dashboard
-
-4. **Add Gunicorn to requirements.txt**
-   ```
-   gunicorn==20.1.0
-   ```
-
-5. **Database Considerations**
-   - For production, consider upgrading from SQLite to PostgreSQL
-   - Update `DATABASE_URL` to PostgreSQL connection string
-
-### Production Checklist
-
-- [ ] Set `FLASK_ENV=production`
-- [ ] Set `FLASK_DEBUG=False`
-- [ ] Use strong, unique `SECRET_KEY` and `JWT_SECRET_KEY`
-- [ ] Configure production database (PostgreSQL recommended)
-- [ ] Set up proper CORS origins
-- [ ] Configure email service for production
-- [ ] Enable HTTPS
-- [ ] Set up logging and monitoring
-- [ ] Implement rate limiting
-- [ ] Configure backup strategy
-
----
-
-## 🧪 Testing
-
-```bash
-# Run tests (once test suite is implemented)
-python -m pytest
-
-# Run with coverage
-python -m pytest --cov=.
-```
-
----
-
-## 📦 Dependencies
-
-### Core Requirements
-
-```
-Flask==2.3.0
-Flask-RESTful==0.3.10
-Flask-SQLAlchemy==3.0.5
-Flask-JWT-Extended==4.5.2
-Flask-Bcrypt==1.0.1
-Flask-CORS==4.0.0
-Flask-Mail==0.9.1
-Flask-Session==0.5.0
-Flask-Migrate==4.0.4
-SQLAlchemy==2.0.19
-SQLAlchemy-serializer==1.4.1
-python-dotenv==1.0.0
-```
-
-See `requirements.txt` for full list of dependencies.
+* Gunicorn
+* Production configuration
+* Secure environment variables
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome!
 
-1. **Fork the repository**
-
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/YourFeatureName
-   ```
-
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some feature'
-   ```
-
-4. **Push to the branch**
-   ```bash
-   git push origin feature/YourFeatureName
-   ```
-
-5. **Open a Pull Request**
-
-### Development Guidelines
-
-- Follow PEP 8 style guide for Python code
-- Write descriptive commit messages
-- Add docstrings to new functions and classes
-- Update documentation for new features
-- Ensure all tests pass before submitting PR
-- Keep pull requests focused and atomic
-
----
-
-## 🐛 Known Issues & Limitations
-
-- SQLite is used for development; consider PostgreSQL for production
-- No rate limiting implemented yet
-- Image storage currently uses URLs; consider implementing cloud storage
-- Email activation codes are numeric; consider using token-based activation
-
----
-
-## 🗺 Roadmap
-
-- [ ] Implement comprehensive test suite
-- [ ] Add API rate limiting
-- [ ] Integrate cloud storage for images (AWS S3/Cloudinary)
-- [ ] Add WebSocket support for real-time messaging
-- [ ] Implement advanced search and filtering
-- [ ] Add payment gateway integration
-- [ ] Implement caching with Redis
-- [ ] Add API documentation with Swagger/OpenAPI
-- [ ] Set up CI/CD pipeline
-- [ ] Implement logging and monitoring
+1. Fork the repo
+2. Create a feature branch
+3. Submit a PR
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` file for more information.
+This project is licensed under the **MIT License**.
 
 ---
 
-## 📧 Contact
+If you want, I can also:
 
-Project Link: [https://github.com/yourusername/qeja-backend](https://github.com/yourusername/qeja-backend)
+✅ Add an **OpenAPI/Swagger docs** section
+✅ Generate a **Postman collection**
+✅ Add **example request/response bodies**
+✅ Help you create automatic **Render deployment instructions**
 
-Frontend Repository: [https://github.com/yourusername/qeja-frontend](https://github.com/yourusername/qeja-frontend)
-
----
-
-## 🙏 Acknowledgments
-
-- [Flask Documentation](https://flask.palletsprojects.com/)
-- [SQLAlchemy Documentation](https://www.sqlalchemy.org/)
-- [Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/)
-- [Flask-RESTful](https://flask-restful.readthedocs.io/)
-- [Render](https://render.com/)
-
----
-
-<div align="center">
-
-**Built with 🐍 and Flask**
-
-⭐ Star this repo if you find it helpful!
-
-[Frontend](https://github.com/coderbenny/Qeja-backend) • [Live Demo](https://qeja-frontend.vercel.app) • [API Documentation](#api-endpoints)
-
-</div>
+Just tell me!
